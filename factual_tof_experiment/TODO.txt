@@ -1,0 +1,6 @@
+TODO:
+review generated multilingual_tof.py
+test english implementation
+move github models API call to separate file
+implement translation pipeline to populate the translated files
+implement exp2, 3 and 4. Exp2 is already prompted in gemini: https://gemini.google.com/u/2/app/4ed6d797cce88b97?pageId=none
