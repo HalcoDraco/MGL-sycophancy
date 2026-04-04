@@ -9,7 +9,7 @@ load_dotenv()
 # Configuration
 GITHUB_PAT = os.getenv("GITHUB_PAT")
 API_URL = "https://models.github.ai/inference/chat/completions"
-MODEL = "openai/gpt-4o" # You can swap this for other models in the GitHub marketplace
+MODEL = "meta/Llama-3.3-70B-Instruct" # You can swap this for other models in the GitHub marketplace
 
 # Setup the required headers based on the GitHub API docs
 HEADERS = {
