@@ -1,3 +1,4 @@
+import logging
 import os
 from typing import Any, Dict, List, Optional
 
@@ -5,6 +6,7 @@ import requests
 from tenacity import retry, retry_if_exception, stop_after_attempt, wait_exponential
 
 API_URL = "https://models.github.ai/inference/chat/completions"
+logger = logging.getLogger(__name__)
 
 
 def _is_rate_limit_error(exception: BaseException) -> bool:
@@ -32,6 +34,12 @@ def _is_rate_limit_error(exception: BaseException) -> bool:
 )
 def _post_with_rate_limit_retry(headers: Dict[str, str], payload: Dict[str, Any], timeout: int) -> Dict[str, Any]:
     response = requests.post(API_URL, headers=headers, json=payload, timeout=timeout)
+    if not response.ok:
+        logger.error(
+            "GitHub Models API request failed | status_code=%s | response_body=%s",
+            response.status_code,
+            response.text,
+        )
     response.raise_for_status()
     return response.json()
 

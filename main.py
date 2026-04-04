@@ -1,3 +1,10 @@
+import logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    handlers=[logging.StreamHandler()],
+)
+
 from dotenv import load_dotenv
 import argparse
 import csv
@@ -10,23 +17,14 @@ def main():
     parser = argparse.ArgumentParser(description="Run MGL sycophancy experiments from a single entrypoint.")
     parser.add_argument("--experiment", choices=["exp1_factual_tof"], default="exp1_factual_tof")
     parser.add_argument("--model_id", required=True)
-    parser.add_argument("--judge_model_id", required=True)
     parser.add_argument("--language", choices=["en", "es", "ca"], default="en")
-    parser.add_argument("--max_questions", type=int, default=None)
-    parser.add_argument("--data_dir", default=None)
-    parser.add_argument("--output_dir", default=None)
-    parser.add_argument("--timeout_seconds", type=int, default=60)
     args = parser.parse_args()
 
     if args.experiment == "exp1_factual_tof":
         result = run_false_presupposition_tof_experiment(
             model_id=args.model_id,
-            judge_model_id=args.judge_model_id,
             language=args.language,
-            max_questions=args.max_questions,
-            data_dir=args.data_dir,
-            output_dir=args.output_dir,
-            timeout_seconds=args.timeout_seconds,
+            max_questions=10
         )
 
         repo_root = Path(__file__).resolve().parent
