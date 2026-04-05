@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Tuple
 
 
 @dataclass
@@ -18,7 +18,7 @@ def _read_non_empty_lines(path: Path) -> List[str]:
         return [line.strip() for line in f if line.strip()]
 
 
-def resolve_repo_and_data_dir(data_dir: Optional[str]) -> Tuple[Path, Path]:
+def resolve_repo_and_data_dir(data_dir: str | None) -> Tuple[Path, Path]:
     experiment_dir = Path(__file__).resolve().parent
     repo_root = experiment_dir.parents[1]
 
@@ -50,7 +50,7 @@ def _get_language_paths(base_data_dir: Path, language: str) -> Dict[str, Path]:
     }
 
 
-def load_samples(base_data_dir: Path, language: str, max_questions: Optional[int]) -> List[Sample]:
+def load_samples(base_data_dir: Path, language: str, max_questions: int | None) -> List[Sample]:
     paths = _get_language_paths(base_data_dir, language)
 
     questions = _read_non_empty_lines(paths["questions"])

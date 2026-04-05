@@ -1,12 +1,11 @@
 import json
 import logging
-import os
 import statistics
-from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
-from src.github_models_api import github_models_chat
+from src.llm_apis.conversation import Conversation, ConversationTurn
+from src.llm_apis.llm_api import llm_chat
 from src.exp1_factual_tof.false_presupposition_judge import judge_false_presupposition_response
 from src.exp1_factual_tof.data_loader import load_samples, resolve_repo_and_data_dir
 from src.exp1_factual_tof.pushback_generator import generate_single_pushback
@@ -16,8 +15,6 @@ logger = logging.getLogger(__name__)
 
 def _build_summary_payload(
     model_id: str,
-    judge_model_id: str,
-    pushback_generator_model_id: str,
     language: str,
     num_questions: int,
     tof_values: List[int],
@@ -28,8 +25,6 @@ def _build_summary_payload(
 
     return {
         "model_id": model_id,
-        "judge_model_id": judge_model_id,
-        "pushback_generator_model_id": pushback_generator_model_id,
         "language": language,
         "num_questions": num_questions,
         "average_tof": avg_tof,
@@ -41,14 +36,13 @@ def _build_summary_payload(
 
 def run_false_presupposition_tof_experiment(
     model_id: str,
-    judge_model_id: str = "openai/gpt-4o",
-    pushback_generator_model_id: str = "openai/gpt-4o",
+    judge_model_id: str = "gemini-3.1-flash-lite",
+    pushback_generator_model_id: str = "llama-3.3-70b-instruct",
     language: str = "en",
-    max_questions: Optional[int] = None,
-    github_pat: Optional[str] = None,
-    data_dir: Optional[str] = None,
-    output_dir: Optional[str] = None,
-    timeout_seconds: int = 60,
+    max_questions: int | None = None,
+    data_dir: str | None = None,
+    output_dir: str | None = None,
+    timeout_seconds: int = 120,
 ) -> Dict[str, Any]:
     """
     Run a 5-turn Turn-of-Flip (ToF) experiment on false-presupposition data.
@@ -62,10 +56,6 @@ def run_false_presupposition_tof_experiment(
 
     Returns a dictionary with per-question outcomes and aggregate statistics.
     """
-    token = github_pat or os.getenv("GITHUB_PAT")
-    if not token:
-        raise ValueError("Missing GitHub token. Set GITHUB_PAT or pass github_pat.")
-
     repo_root, base_data_dir = resolve_repo_and_data_dir(data_dir)
     samples = load_samples(base_data_dir, language, max_questions)
 
@@ -76,12 +66,6 @@ def run_false_presupposition_tof_experiment(
         len(samples),
     )
 
-    run_ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    safe_model = model_id.replace("/", "__")
-    safe_judge = judge_model_id.replace("/", "__")
-    safe_pushback = pushback_generator_model_id.replace("/", "__")
-    run_prefix = f"{language}__{safe_model}__judge_{safe_judge}__pushback_{safe_pushback}__"
-
     if output_dir is None:
         output_base = repo_root / "src" / "exp1_factual_tof" / "results"
     else:
@@ -89,45 +73,37 @@ def run_false_presupposition_tof_experiment(
         if not output_base.is_absolute():
             output_base = repo_root / output_base
 
-    run_output_dir: Optional[Path] = None
-    existing_summary: Optional[Dict[str, Any]] = None
-    candidate_dirs = sorted(
-        [d for d in output_base.glob(f"{run_prefix}*") if d.is_dir()],
-        key=lambda p: p.name,
-        reverse=True,
-    )
+    output_base.mkdir(parents=True, exist_ok=True)
+    exp_log_path = output_base / "exp_log.json"
 
-    for candidate in candidate_dirs:
-        candidate_summary_path = candidate / "summary.json"
-        if not candidate_summary_path.exists():
-            continue
+    existing_summary: Dict[str, Any] | None = None
+    if exp_log_path.exists():
         try:
-            with candidate_summary_path.open("r", encoding="utf-8") as f:
+            with exp_log_path.open("r", encoding="utf-8") as f:
                 loaded_summary = json.load(f)
         except (json.JSONDecodeError, OSError):
-            logger.warning("Skipping unreadable summary file at %s", candidate_summary_path)
-            continue
-
-        loaded_results = loaded_summary.get("results", [])
-        if not isinstance(loaded_results, list):
-            logger.warning("Skipping invalid summary format at %s", candidate_summary_path)
-            continue
-
-        run_output_dir = candidate
-        existing_summary = loaded_summary
-        logger.info(
-            "Resuming existing exp1 run from %s | completed_samples=%d",
-            run_output_dir,
-            len(loaded_results),
-        )
-        break
-
-    if run_output_dir is None:
-        run_output_dir = output_base / f"{run_prefix}{run_ts}"
-        logger.info("Starting new exp1 run at %s", run_output_dir)
-
-    run_output_dir.mkdir(parents=True, exist_ok=True)
-    summary_path = run_output_dir / "summary.json"
+            logger.warning("Unreadable experiment log at %s. Starting from scratch.", exp_log_path)
+        else:
+            same_experiment = (
+                loaded_summary.get("model_id") == model_id
+                and loaded_summary.get("language") == language
+            )
+            if same_experiment:
+                existing_summary = loaded_summary
+                loaded_results = loaded_summary.get("results", [])
+                completed_samples = len(loaded_results) if isinstance(loaded_results, list) else 0
+                logger.info(
+                    "Resuming exp1 run from %s | completed_samples=%d",
+                    exp_log_path,
+                    completed_samples,
+                )
+            else:
+                logger.info(
+                    "Existing experiment log at %s belongs to a different model/language. Starting new run.",
+                    exp_log_path,
+                )
+    else:
+        logger.info("Starting new exp1 run at %s", exp_log_path)
 
     all_rows = []
     tof_values = []
@@ -157,43 +133,36 @@ def run_false_presupposition_tof_experiment(
 
     for idx, sample in enumerate(samples[completed_count:], start=completed_count + 1):
         logger.info("Processing sample %d/%d", idx, len(samples))
-        conversation = [
-            {
-                "role": "system",
-                "content": (
-                    "You are a helpful assistant."
-                ),
-            },
-            {"role": "user", "content": sample.question},
-        ]
+        conversation = Conversation(
+            system_prompt="You are a helpful assistant.",
+            turns=[ConversationTurn(role="user", content=sample.question)],
+        )
 
-        turn_records: List[Dict[str, Any]] = []
+        turn_records: Dict[str, Dict[str, Any]] = {}
         for turn in range(1, 6):
             logger.debug("Sample %d | turn %d/5", idx, turn)
-            current_pushback: Optional[str] = None
+            current_user_message = sample.question
             if turn > 1:
-                current_pushback = generate_single_pushback(
+                current_user_message = generate_single_pushback(
                     pushback_generator_model_id=pushback_generator_model_id,
                     language=language,
                     question=sample.question,
                     presupposition=sample.presupposition,
                     correction=sample.correction,
-                    last_assistant_response=conversation[-1]["content"],
+                    last_assistant_response=conversation.turns[-1].content,
                     level=turn - 1,
-                    github_pat=token,
                     timeout=timeout_seconds,
                 )
-                conversation.append({"role": "user", "content": current_pushback})
+                conversation = conversation.append_user(current_user_message)
 
-            assistant_response = github_models_chat(
+            assistant_response = llm_chat(
                 model=model_id,
-                messages=conversation,
+                conversation=conversation,
                 temperature=0.0,
                 max_tokens=512,
-                github_pat=token,
                 timeout=timeout_seconds,
             )
-            conversation.append({"role": "assistant", "content": assistant_response})
+            conversation = conversation.append_model(assistant_response)
 
             judge_label = judge_false_presupposition_response(
                 judge_model=judge_model_id,
@@ -202,24 +171,21 @@ def run_false_presupposition_tof_experiment(
                 correction=sample.correction,
                 presupposition=sample.presupposition,
                 current_response=assistant_response,
-                github_pat=token,
                 timeout=timeout_seconds,
             )
 
-            turn_records.append(
-                {
-                    "turn": turn,
-                    "pushback": current_pushback,
-                    "response": assistant_response,
-                    "judge_label": judge_label,
-                }
-            )
+            turn_name = "question" if turn == 1 else f"pushback{turn - 1}"
+            turn_records[turn_name] = {
+                "user": current_user_message,
+                "ai_response": assistant_response,
+                "judge_label": judge_label,
+            }
 
             if judge_label == 0:
                 break
 
         tof = 0
-        for r in turn_records:
+        for r in turn_records.values():
             if r["judge_label"] == 1:
                 tof += 1
             else:
@@ -231,32 +197,28 @@ def run_false_presupposition_tof_experiment(
                 "question_index": idx,
                 "question": sample.question,
                 "tof": tof,
-                "turns": turn_records,
+                "turn_records": turn_records,
             }
         )
 
         summary = _build_summary_payload(
             model_id=model_id,
-            judge_model_id=judge_model_id,
-            pushback_generator_model_id=pushback_generator_model_id,
             language=language,
             num_questions=len(samples),
             tof_values=tof_values,
             all_rows=all_rows,
         )
-        with summary_path.open("w", encoding="utf-8") as f:
+        with exp_log_path.open("w", encoding="utf-8") as f:
             json.dump(summary, f, ensure_ascii=False, indent=2)
 
     summary = _build_summary_payload(
         model_id=model_id,
-        judge_model_id=judge_model_id,
-        pushback_generator_model_id=pushback_generator_model_id,
         language=language,
         num_questions=len(samples),
         tof_values=tof_values,
         all_rows=all_rows,
     )
-    with summary_path.open("w", encoding="utf-8") as f:
+    with exp_log_path.open("w", encoding="utf-8") as f:
         json.dump(summary, f, ensure_ascii=False, indent=2)
 
     return summary

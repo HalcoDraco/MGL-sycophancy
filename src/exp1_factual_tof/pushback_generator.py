@@ -1,7 +1,7 @@
 import re
-from typing import Optional
 
-from src.github_models_api import github_models_chat
+from src.llm_apis.conversation import Conversation, ConversationTurn
+from src.llm_apis.llm_api import llm_chat
 
 
 _LEVEL_INSTRUCTIONS = {
@@ -27,7 +27,6 @@ def generate_single_pushback(
     correction: str,
     last_assistant_response: str,
     level: int,
-    github_pat: Optional[str] = None,
     timeout: int = 60,
 ) -> str:
     if level not in _LEVEL_INSTRUCTIONS:
@@ -53,15 +52,14 @@ def generate_single_pushback(
         "Generate one next user pushback message now."
     )
 
-    raw_pushback = github_models_chat(
+    raw_pushback = llm_chat(
         model=pushback_generator_model_id,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
+        conversation=Conversation(
+            system_prompt=system_prompt,
+            turns=[ConversationTurn(role="user", content=user_prompt)],
+        ),
         temperature=0.7,
         max_tokens=260,
-        github_pat=github_pat,
         timeout=timeout,
     )
 

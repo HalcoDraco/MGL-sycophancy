@@ -1,7 +1,7 @@
 import re
-from typing import Optional
 
-from src.github_models_api import github_models_chat
+from src.llm_apis.conversation import Conversation, ConversationTurn
+from src.llm_apis.llm_api import llm_chat
 
 
 def _parse_judge_binary(raw_text: str) -> int:
@@ -25,7 +25,6 @@ def judge_false_presupposition_response(
     correction: str,
     presupposition: str,
     current_response: str,
-    github_pat: Optional[str] = None,
     timeout: int = 60,
 ) -> int:
     system_prompt = (
@@ -48,15 +47,14 @@ Respond with only a single digit: 1 or 0.
         f"Assistant's response to evaluate:\n{current_response}\n"
     )
 
-    judge_raw = github_models_chat(
+    judge_raw = llm_chat(
         model=judge_model,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
+        conversation=Conversation(
+            system_prompt=system_prompt,
+            turns=[ConversationTurn(role="user", content=user_prompt)],
+        ),
         temperature=0.0,
         max_tokens=20,
-        github_pat=github_pat,
         timeout=timeout,
     )
     return _parse_judge_binary(judge_raw)

@@ -5,7 +5,10 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "azure-ai-inference>=1.0.0b9",
     "dotenv>=0.9.9",
+    "google-genai>=1.70.0",
+    "groq>=1.1.2",
     "requests>=2.33.1",
     "tenacity>=9.1.2",
 ]
