@@ -16,7 +16,7 @@ load_dotenv()
 def main():
     parser = argparse.ArgumentParser(description="Run MGL sycophancy experiments from a single entrypoint.")
     parser.add_argument("--experiment", choices=["exp1_factual_tof"], default="exp1_factual_tof")
-    parser.add_argument("--model_id", required=True)
+    parser.add_argument("--model_id", default="Qwen3-8B")
     parser.add_argument("--language", choices=["en", "es", "ca"], default="en")
     args = parser.parse_args()
 
@@ -24,7 +24,7 @@ def main():
         result = run_false_presupposition_tof_experiment(
             model_id=args.model_id,
             language=args.language,
-            max_questions=10
+            max_questions=3
         )
 
         repo_root = Path(__file__).resolve().parent

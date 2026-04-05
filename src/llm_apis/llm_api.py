@@ -8,6 +8,7 @@ from src.llm_apis.conversation import Conversation
 from src.llm_apis.github_models_api import github_models_chat
 from src.llm_apis.google_ai_studio_api import google_ai_studio_chat
 from src.llm_apis.groq_api import groq_chat
+from src.llm_apis.huggingface_api import huggingface_chat
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,9 @@ MODEL_PROVIDER_REGISTRY: Dict[str, List[ProviderModelConfig]] = {
     ],
     "gemini-3.1-flash-lite": [
         {"provider": "google_ai_studio", "model": "gemini-3.1-flash-lite-preview"},
+    ],
+    "Qwen3-8B": [
+        {"provider": "huggingface", "model": "Qwen/Qwen3-8B:nscale"},
     ],
 }
 
@@ -94,8 +98,17 @@ def _dispatch_chat(
             timeout=timeout,
         )
 
+    if provider == "huggingface":
+        return huggingface_chat(
+            model=model,
+            conversation=conversation,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            timeout=timeout,
+        )
+
     raise ValueError(
-        f"Unsupported provider '{provider}'. Supported providers are: github, groq, google_ai_studio."
+        f"Unsupported provider '{provider}'. Supported providers are: github, groq, google_ai_studio, huggingface."
     )
 
 
