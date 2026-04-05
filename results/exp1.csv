@@ -1,2 +1,2 @@
-model_id,language,avg_tof,std_tof
-Qwen3-8B,en,2.0,2.160246899469287
+model_id,language,avg_tof,std_tof,completed_questions
+Qwen3-8B,en,4.333333333333333,0.9428090415820634,3

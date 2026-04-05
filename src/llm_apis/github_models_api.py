@@ -1,46 +1,29 @@
-import logging
 import os
-from typing import Any, Dict, List
+from typing import List, Union
 
-import requests
+from azure.ai.inference import ChatCompletionsClient
+from azure.ai.inference.models import AssistantMessage, ChatRequestMessage, SystemMessage, UserMessage
+from azure.core.credentials import AzureKeyCredential
 
 from src.llm_apis.conversation import Conversation
 
-API_URL = "https://models.github.ai/inference/chat/completions"
-logger = logging.getLogger(__name__)
+API_ENDPOINT = "https://models.github.ai/inference"
 
 
-def _conversation_to_messages(conversation: Conversation) -> List[Dict[str, str]]:
-    messages: List[Dict[str, str]] = []
+def _conversation_to_messages(conversation: Conversation) -> List[ChatRequestMessage]:
+    messages: List[ChatRequestMessage] = []
     if conversation.system_prompt.strip():
-        messages.append({"role": "system", "content": conversation.system_prompt})
+        messages.append(SystemMessage(conversation.system_prompt))
 
     for turn in conversation.turns:
-        provider_role = "assistant" if turn.role == "model" else "user"
-        messages.append({"role": provider_role, "content": turn.content})
+        provider_message: Union[UserMessage, AssistantMessage]
+        if turn.role == "model":
+            provider_message = AssistantMessage(turn.content)
+        else:
+            provider_message = UserMessage(turn.content)
+        messages.append(provider_message)
 
     return messages
-
-
-def _post_chat_completion(headers: Dict[str, str], payload: Dict[str, Any], timeout: int) -> Dict[str, Any]:
-    response = requests.post(API_URL, headers=headers, json=payload, timeout=timeout)
-    if not response.ok:
-        logger.error(
-            "GitHub Models API request failed | status_code=%s | response_body=%s",
-            response.status_code,
-            response.text,
-        )
-    response.raise_for_status()
-    return response.json()
-
-
-def _build_headers(github_pat: str) -> Dict[str, str]:
-    return {
-        "Accept": "application/vnd.github+json",
-        "Authorization": f"Bearer {github_pat}",
-        "X-GitHub-Api-Version": "2022-11-28",
-        "Content-Type": "application/json",
-    }
 
 
 def github_models_chat(
@@ -51,15 +34,19 @@ def github_models_chat(
     timeout: int = 120,
 ) -> str:
     """Call GitHub Models Chat Completions and return assistant text."""
-    token = os.getenv("GITHUB_PAT")
+    token = os.getenv("GITHUB_TOKEN") or os.getenv("GITHUB_PAT")
     if not token:
-        raise ValueError("Missing GitHub token. Set GITHUB_PAT.")
+        raise ValueError("Missing GitHub token. Set GITHUB_TOKEN or GITHUB_PAT.")
 
-    payload = {
-        "model": model,
-        "messages": _conversation_to_messages(conversation),
-        "temperature": temperature,
-        "max_tokens": max_tokens,
-    }
-    response_json = _post_chat_completion(_build_headers(token), payload, timeout)
-    return response_json["choices"][0]["message"]["content"].strip()
+    client = ChatCompletionsClient(
+        endpoint=API_ENDPOINT,
+        credential=AzureKeyCredential(token),
+    )
+    response = client.complete(
+        model=model,
+        messages=_conversation_to_messages(conversation),
+        temperature=temperature,
+        max_tokens=max_tokens,
+    )
+    content = response.choices[0].message.content
+    return (content or "").strip()

@@ -13,6 +13,10 @@ from src.llm_apis.huggingface_api import huggingface_chat
 logger = logging.getLogger(__name__)
 
 
+class InvalidLLMResponseError(requests.exceptions.RequestException):
+    """Raised when a provider returns an empty or malformed text response."""
+
+
 class ProviderModelConfig(TypedDict):
     provider: str
     model: str
@@ -21,7 +25,12 @@ class ProviderModelConfig(TypedDict):
 MODEL_PROVIDER_REGISTRY: Dict[str, List[ProviderModelConfig]] = {
     "llama-3.3-70b-instruct": [
         {"provider": "groq", "model": "llama-3.3-70b-versatile"},
+        {"provider": "huggingface", "model": "meta-llama/Llama-3.3-70B-Instruct:novita"},
         {"provider": "github", "model": "meta/Llama-3.3-70B-Instruct"},
+    ],
+    "llama-3.1-8b": [
+        {"provider": "groq", "model": "llama-3.1-8b-instant"},
+        {"provider": "huggingface", "model": "meta-llama/Llama-3.1-8B-Instruct:novita"},
     ],
     "gemini-3.1-flash-lite": [
         {"provider": "google_ai_studio", "model": "gemini-3.1-flash-lite-preview"},
@@ -44,6 +53,9 @@ def _select_provider_and_model(model: str) -> ProviderModelConfig:
 
 
 def _is_retryable_error(exception: BaseException) -> bool:
+    if isinstance(exception, InvalidLLMResponseError):
+        return True
+
     if isinstance(exception, (requests.exceptions.Timeout, requests.exceptions.ConnectionError)):
         return True
 
@@ -72,7 +84,7 @@ def _dispatch_chat(
     timeout: int,
 ) -> str:
     if provider == "github":
-        return github_models_chat(
+        ai_response = github_models_chat(
             model=model,
             conversation=conversation,
             temperature=temperature,
@@ -80,8 +92,8 @@ def _dispatch_chat(
             timeout=timeout,
         )
 
-    if provider == "groq":
-        return groq_chat(
+    elif provider == "groq":
+        ai_response = groq_chat(
             model=model,
             conversation=conversation,
             temperature=temperature,
@@ -89,8 +101,8 @@ def _dispatch_chat(
             timeout=timeout,
         )
 
-    if provider == "google_ai_studio":
-        return google_ai_studio_chat(
+    elif provider == "google_ai_studio":
+        ai_response = google_ai_studio_chat(
             model=model,
             conversation=conversation,
             temperature=temperature,
@@ -98,19 +110,25 @@ def _dispatch_chat(
             timeout=timeout,
         )
 
-    if provider == "huggingface":
-        return huggingface_chat(
+    elif provider == "huggingface":
+        ai_response = huggingface_chat(
             model=model,
             conversation=conversation,
             temperature=temperature,
             max_tokens=max_tokens,
             timeout=timeout,
         )
+    else:
+        raise ValueError(
+            f"Unsupported provider '{provider}'. Supported providers are: github, groq, google_ai_studio, huggingface."
+        )
 
-    raise ValueError(
-        f"Unsupported provider '{provider}'. Supported providers are: github, groq, google_ai_studio, huggingface."
-    )
+    if not ai_response or not isinstance(ai_response, str) or not ai_response.strip():
+        raise InvalidLLMResponseError(
+            f"Provider '{provider}' returned an invalid response for model '{model}'."
+        )
 
+    return ai_response.strip()
 
 def llm_chat(
     model: str,
@@ -133,10 +151,34 @@ def llm_chat(
         timeout,
     )
 
+    def _log_retry_attempt(retry_state: object) -> None:
+        attempt_number = getattr(retry_state, "attempt_number", 0)
+        next_retry_number = attempt_number + 1
+        next_action = getattr(retry_state, "next_action", None)
+        wait_seconds = getattr(next_action, "sleep", None)
+
+        outcome = getattr(retry_state, "outcome", None)
+        error_text = "unknown"
+        if outcome is not None and getattr(outcome, "failed", False):
+            error = outcome.exception()
+            if error is not None:
+                error_text = str(error)
+
+        logger.info(
+            "Retrying LLM chat request | provider=%s | model=%s | retry=%s/%s | wait=%.2fs | error=%s",
+            provider,
+            provider_model,
+            next_retry_number,
+            retries,
+            wait_seconds if wait_seconds is not None else 0.0,
+            error_text,
+        )
+
     retrying = Retrying(
         retry=retry_if_exception(_is_retryable_error),
         wait=wait_exponential(min=1, max=120),
         stop=stop_after_attempt(retries),
+        before_sleep=_log_retry_attempt,
         reraise=True,
     )
 

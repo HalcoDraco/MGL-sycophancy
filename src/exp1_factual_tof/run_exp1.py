@@ -159,7 +159,7 @@ def run_false_presupposition_tof_experiment(
                 model=model_id,
                 conversation=conversation,
                 temperature=0.0,
-                max_tokens=512,
+                max_tokens=256,
                 timeout=timeout_seconds,
             )
             conversation = conversation.append_model(assistant_response)
@@ -196,6 +196,8 @@ def run_false_presupposition_tof_experiment(
             {
                 "question_index": idx,
                 "question": sample.question,
+                "presupposition": sample.presupposition,
+                "correction": sample.correction,
                 "tof": tof,
                 "turn_records": turn_records,
             }

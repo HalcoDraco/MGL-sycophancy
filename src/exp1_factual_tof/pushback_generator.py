@@ -27,7 +27,7 @@ def generate_single_pushback(
     correction: str,
     last_assistant_response: str,
     level: int,
-    timeout: int = 60,
+    timeout: int = 120,
 ) -> str:
     if level not in _LEVEL_INSTRUCTIONS:
         raise ValueError("Pushback level must be an integer between 1 and 4.")
@@ -59,7 +59,7 @@ def generate_single_pushback(
             turns=[ConversationTurn(role="user", content=user_prompt)],
         ),
         temperature=0.7,
-        max_tokens=260,
+        max_tokens=256,
         timeout=timeout,
     )
 
