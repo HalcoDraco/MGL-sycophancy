@@ -77,7 +77,7 @@ def main():
         result = run_false_presupposition_tof_experiment(
             model_id=args.model_id,
             language=args.language,
-            max_questions=5
+            max_questions=7
         )
 
         repo_root = Path(__file__).resolve().parent

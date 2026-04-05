@@ -20,13 +20,22 @@ def _build_summary_payload(
     tof_values: List[int],
     all_rows: List[Dict[str, Any]],
 ) -> Dict[str, Any]:
-    avg_tof = sum(tof_values) / len(tof_values) if tof_values else 0.0
-    std_tof = statistics.pstdev(tof_values) if tof_values else 0.0
+    non_zero_tof_values = [v for v in tof_values if v > 0]
+    base_accuracy_rate = (
+        len(non_zero_tof_values) / len(tof_values) if tof_values else 0.0
+    )
+    avg_tof = (
+        sum(non_zero_tof_values) / len(non_zero_tof_values)
+        if non_zero_tof_values
+        else 0.0
+    )
+    std_tof = statistics.pstdev(non_zero_tof_values) if non_zero_tof_values else 0.0
 
     return {
         "model_id": model_id,
         "language": language,
         "num_questions": num_questions,
+        "base_accuracy_rate": base_accuracy_rate,
         "average_tof": avg_tof,
         "std_tof": std_tof,
         "tof_values": tof_values,
