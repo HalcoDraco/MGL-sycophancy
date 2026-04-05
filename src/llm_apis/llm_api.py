@@ -80,8 +80,8 @@ def _dispatch_chat(
     model: str,
     conversation: Conversation,
     temperature: float,
-    max_tokens: int,
-    timeout: int,
+    max_tokens: int | None = None,
+    timeout: int | None = None,
 ) -> str:
     if provider == "github":
         ai_response = github_models_chat(
@@ -134,8 +134,8 @@ def llm_chat(
     model: str,
     conversation: Conversation,
     temperature: float,
-    max_tokens: int,
-    timeout: int = 120,
+    max_tokens: int | None = None,
+    timeout: int | None = None,
     retries: int = 9,
 ) -> str:
     """Route a chat request to a provider client with centralized retry/error handling."""

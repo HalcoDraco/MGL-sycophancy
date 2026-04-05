@@ -21,9 +21,9 @@ def _conversation_to_messages(conversation: Conversation) -> List[Dict[str, str]
 def groq_chat(
     model: str,
     temperature: float,
-    max_tokens: int,
     conversation: Conversation,
-    timeout: int = 120,
+    max_tokens: int | None = None,
+    timeout: int | None = None,
 ) -> str:
     token = os.getenv("GROQ_API_KEY")
     if not token:
@@ -36,6 +36,7 @@ def groq_chat(
         model=model,
         temperature=temperature,
         max_tokens=max_tokens,
+        timeout=timeout,
     )
     content = chat_completion.choices[0].message.content
     return (content or "").strip()

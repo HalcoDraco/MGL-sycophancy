@@ -29,9 +29,9 @@ def _conversation_to_messages(conversation: Conversation) -> List[ChatRequestMes
 def github_models_chat(
     model: str,
     temperature: float,
-    max_tokens: int,
     conversation: Conversation,
-    timeout: int = 120,
+    max_tokens: int | None = None,
+    timeout: int | None = None,
 ) -> str:
     """Call GitHub Models Chat Completions and return assistant text."""
     token = os.getenv("GITHUB_TOKEN") or os.getenv("GITHUB_PAT")

@@ -24,9 +24,9 @@ def _conversation_to_messages(conversation: Conversation) -> List[Dict[str, str]
 def huggingface_chat(
     model: str,
     temperature: float,
-    max_tokens: int,
     conversation: Conversation,
-    timeout: int = 120,
+    max_tokens: int | None = None,
+    timeout: int | None = None,
 ) -> str:
     token = os.getenv("HF_TOKEN")
     if not token:
@@ -36,7 +36,7 @@ def huggingface_chat(
     response = client.chat_completion(
         model=model,
         messages=_conversation_to_messages(conversation),
-        # max_tokens=max_tokens,
+        max_tokens=max_tokens,
         temperature=temperature,
     )
     content = response.choices[0].message.content

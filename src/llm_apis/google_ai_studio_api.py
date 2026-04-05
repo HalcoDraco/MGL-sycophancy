@@ -22,15 +22,15 @@ def _conversation_to_contents(conversation: Conversation) -> List[types.Content]
 def google_ai_studio_chat(
     model: str,
     temperature: float,
-    max_tokens: int,
     conversation: Conversation,
-    timeout: int = 120,
+    max_tokens: int | None = None,
+    timeout: int | None = None,
 ) -> str:
     token = os.getenv("GEMINI_API_KEY")
     if not token:
         raise ValueError("Missing Google Gemini API key. Set GEMINI_API_KEY.")
 
-    client = genai.Client(api_key=token, http_options=types.HttpOptions(timeout=timeout * 1000))
+    client = genai.Client(api_key=token)
 
     config = types.GenerateContentConfig(
         system_instruction=conversation.system_prompt,
