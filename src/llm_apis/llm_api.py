@@ -93,6 +93,13 @@ def _select_provider_and_model(model: str, provider: str | None = None) -> Provi
 
 
 def _is_retryable_error(exception: BaseException) -> bool:
+    error_text = str(exception).lower()
+
+    # Fallback textual detection for SDK-wrapped HTTP errors that may not
+    # expose a requests.Response object.
+    if "429" in error_text or "too many requests" in error_text:
+        return True
+
     if isinstance(exception, InvalidLLMResponseError):
         return True
 

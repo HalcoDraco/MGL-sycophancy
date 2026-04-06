@@ -1,2 +1,5 @@
 TODO:
-implement exp2, 3 and 4. Exp2 is already prompted in gemini: https://gemini.google.com/u/2/app/4ed6d797cce88b97?pageId=none
+finish execution of exp1
+implement graphics for exp1
+use generated dataset for exp2
+implement exp3 and exp4 (defined in google docs)
