@@ -32,11 +32,41 @@ MODEL_PROVIDER_REGISTRY: Dict[str, List[ProviderModelConfig]] = {
         {"provider": "groq", "model": "llama-3.1-8b-instant"},
         {"provider": "huggingface", "model": "meta-llama/Llama-3.1-8B-Instruct:novita"},
     ],
+    "Hermes-3-Llama-3.1-8B": [
+        {"provider": "huggingface", "model": "NousResearch/Hermes-3-Llama-3.1-8B:featherless-ai"},
+    ],
     "gemini-3.1-flash-lite": [
         {"provider": "google_ai_studio", "model": "gemini-3.1-flash-lite-preview"},
     ],
+    "DeepSeek-V3": [
+        {"provider": "huggingface", "model": "deepseek-ai/DeepSeek-V3:novita"},
+    ],
+    "DeepSeek-R1": [
+        {"provider": "huggingface", "model": "deepseek-ai/DeepSeek-R1:novita"},
+    ],
     "Qwen3-8B": [
         {"provider": "huggingface", "model": "Qwen/Qwen3-8B:nscale"},
+    ],
+    "Qwen2.5-1.5B-Instruct": [
+        {"provider": "huggingface", "model": "Qwen/Qwen2.5-1.5B-Instruct:featherless-ai"},
+    ],
+    "Qwen2.5-7B-Instruct": [
+        {"provider": "huggingface", "model": "Qwen/Qwen2.5-7B-Instruct:featherless-ai"},
+    ],
+    "Qwen2.5-14B-Instruct": [
+        {"provider": "huggingface", "model": "Qwen/Qwen2.5-14B-Instruct:featherless-ai"},
+    ],
+    "Qwen2.5-32B-Instruct": [
+        {"provider": "huggingface", "model": "Qwen/Qwen2.5-32B-Instruct:featherless-ai"},
+    ],
+    "Qwen2.5-72B-Instruct": [
+        {"provider": "huggingface", "model": "Qwen/Qwen2.5-72B-Instruct:novita"},
+    ],
+    "Mistral-7B-Instruct-v0.2": [
+        {"provider": "huggingface", "model": "mistralai/Mistral-7B-Instruct-v0.2:featherless-ai"},
+    ],
+    "gemma-2-9b-it": [
+        {"provider": "huggingface", "model": "google/gemma-2-9b-it:featherless-ai"},
     ],
 }
 
