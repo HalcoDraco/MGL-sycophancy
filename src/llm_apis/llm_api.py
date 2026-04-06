@@ -1,3 +1,4 @@
+import json
 import logging
 from typing import Dict, List, TypedDict
 
@@ -24,7 +25,7 @@ class ProviderModelConfig(TypedDict):
 
 MODEL_PROVIDER_REGISTRY: Dict[str, List[ProviderModelConfig]] = {
     "llama-3.3-70b-instruct": [
-        {"provider": "groq", "model": "llama-3.3-70b-versatile"},
+        # {"provider": "groq", "model": "llama-3.3-70b-versatile"},
         {"provider": "huggingface", "model": "meta-llama/Llama-3.3-70B-Instruct:novita"},
         {"provider": "github", "model": "meta/Llama-3.3-70B-Instruct"},
     ],
@@ -71,19 +72,33 @@ MODEL_PROVIDER_REGISTRY: Dict[str, List[ProviderModelConfig]] = {
 }
 
 
-def _select_provider_and_model(model: str) -> ProviderModelConfig:
+def _select_provider_and_model(model: str, provider: str | None = None) -> ProviderModelConfig:
     """Resolve a canonical model id to the first provider/model mapping in priority order."""
     provider_options = MODEL_PROVIDER_REGISTRY.get(model)
     if not provider_options:
         supported_models = ", ".join(sorted(MODEL_PROVIDER_REGISTRY.keys()))
         raise ValueError(f"Unsupported model '{model}'. Supported models: {supported_models}")
 
-    # For now, always use the highest-priority provider (first entry).
+    if provider:
+        for option in provider_options:
+            if option["provider"] == provider:
+                return option
+        supported_providers = ", ".join(option["provider"] for option in provider_options)
+        raise ValueError(
+            f"Model '{model}' is not available from provider '{provider}'. "
+            f"Supported providers for this model are: {supported_providers}"
+        )
+    
     return provider_options[0]
 
 
 def _is_retryable_error(exception: BaseException) -> bool:
     if isinstance(exception, InvalidLLMResponseError):
+        return True
+
+    # Some SDKs (notably Hugging Face) may occasionally return malformed JSON.
+    # Treat parser failures as transient provider errors and retry.
+    if isinstance(exception, json.JSONDecodeError):
         return True
 
     if isinstance(exception, (requests.exceptions.Timeout, requests.exceptions.ConnectionError)):
@@ -166,10 +181,11 @@ def llm_chat(
     temperature: float,
     max_tokens: int | None = None,
     timeout: int | None = None,
+    provider: str | None = None,
     retries: int = 9,
 ) -> str:
     """Route a chat request to a provider client with centralized retry/error handling."""
-    selected_config = _select_provider_and_model(model)
+    selected_config = _select_provider_and_model(model, provider)
     provider = selected_config["provider"]
     provider_model = selected_config["model"]
 
@@ -223,7 +239,7 @@ def llm_chat(
                     max_tokens=max_tokens,
                     timeout=timeout,
                 )
-    except requests.exceptions.RequestException:
+    except (requests.exceptions.RequestException, json.JSONDecodeError):
         logger.exception(
             "LLM API request failed after retries | provider=%s | model=%s",
             provider,

@@ -40,7 +40,7 @@ def main():
         family_test = ["Mistral-7B-Instruct-v0.2", "gemma-2-9b-it"]
         model_ids = reasoning_test + alignment_test + size_test #+ family_test
 
-        for num_questions in range(1, 70):
+        for num_questions in range(1, 50):
             for language in languages:
                 for model_id in model_ids:
                     run_false_presupposition_tof_experiment(
