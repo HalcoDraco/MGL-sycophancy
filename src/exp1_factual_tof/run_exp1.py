@@ -2,7 +2,9 @@ import json
 import logging
 import statistics
 import csv
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import re
+import threading
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -156,6 +158,14 @@ def _safe_checkpoint_fragment(value: str) -> str:
     sanitized = sanitized.strip("._-")
     return sanitized or "unknown"
 
+
+def _question_index_or_fallback(row: Dict[str, Any]) -> int:
+    return _safe_int(row.get("question_index"), default=10**12)
+
+
+def _sort_rows_by_question_index(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    return sorted(rows, key=_question_index_or_fallback)
+
 def _build_summary_payload(
     model_id: str,
     language: str,
@@ -189,6 +199,7 @@ def run_false_presupposition_tof_experiment(
     data_dir: str | None = None,
     output_dir: str | None = None,
     timeout_seconds: int = 120,
+    num_workers: int = 1,
 ) -> Dict[str, Any]:
     """
     Run a 5-turn Turn-of-Flip (ToF) experiment on false-presupposition data.
@@ -256,26 +267,57 @@ def run_false_presupposition_tof_experiment(
 
     all_rows = []
     if existing_summary is not None:
-        all_rows = existing_summary.get("results", [])
-        if not isinstance(all_rows, list):
+        loaded_rows = existing_summary.get("results", [])
+        if not isinstance(loaded_rows, list):
             logger.warning("Existing summary has invalid results. Starting from scratch.")
             all_rows = []
+        else:
+            all_rows = _sort_rows_by_question_index(loaded_rows)
 
-    if len(all_rows) >= len(samples):
+    computed_question_idx = {
+        idx
+        for idx in (_safe_int(row.get("question_index"), default=-1) for row in all_rows)
+        if 1 <= idx <= len(samples)
+    }
+    remaining_question_idx = [
+        idx for idx in range(1, len(samples) + 1) if idx not in computed_question_idx
+    ]
+
+    logger.info(
+        "Resume status | completed=%d | remaining=%d",
+        len(computed_question_idx),
+        len(remaining_question_idx),
+    )
+
+    # Persist a sorted checkpoint at startup so resumes always begin from ordered results.
+    startup_summary = _build_summary_payload(
+        model_id=model_id,
+        language=language,
+        num_questions=len(samples),
+        all_rows=all_rows,
+    )
+    with exp_log_path.open("w", encoding="utf-8") as f:
+        json.dump(startup_summary, f, ensure_ascii=False, indent=2)
+    _upsert_exp1_result(csv_path=csv_path, result=startup_summary)
+
+    if not remaining_question_idx:
         logger.warning(
             "Existing summary already satisfies requested samples (%d >= %d). "
             "Skipping run.",
-            len(all_rows),
+            len(computed_question_idx),
             len(samples),
         )
-        return existing_summary if existing_summary is not None else _build_summary_payload(
+        all_rows = _sort_rows_by_question_index(all_rows)
+        summary = _build_summary_payload(
             model_id=model_id,
             language=language,
             num_questions=len(samples),
             all_rows=all_rows,
         )
-
-    completed_count = min(len(all_rows), len(samples))
+        with exp_log_path.open("w", encoding="utf-8") as f:
+            json.dump(summary, f, ensure_ascii=False, indent=2)
+        _upsert_exp1_result(csv_path=csv_path, result=summary)
+        return summary
 
     
     system_prompt = SYSTEM_PROMPTS.get(language)
@@ -283,7 +325,11 @@ def run_false_presupposition_tof_experiment(
         logger.error("Unsupported language '%s'. No system prompt available. Aborting experiment.", language)
         raise ValueError(f"Unsupported language '{language}'. Supported languages are: {', '.join(SYSTEM_PROMPTS.keys())}.")
 
-    for idx, sample in enumerate(samples[completed_count:], start=completed_count + 1):
+    write_lock = threading.Lock()
+    workers = num_workers if num_workers and num_workers > 0 else min(8, max(1, len(remaining_question_idx)))
+
+    def _process_question(idx: int) -> None:
+        sample = samples[idx - 1]
         logger.info("Processing sample %d/%d", idx, len(samples))
         conversation = Conversation(
             system_prompt=system_prompt,
@@ -346,29 +392,50 @@ def run_false_presupposition_tof_experiment(
         last_turn = list(turn_records.values())[-1] if turn_records else {}
         terminal_judge_label = _safe_int(last_turn.get("judge_label"), default=2)
         first_judge_label = _safe_int(turn_records.get("question", {}).get("judge_label"), default=2)
-        all_rows.append(
-            {
-                "question_index": idx,
-                "question": sample.question,
-                "presupposition": sample.presupposition,
-                "correction": sample.correction,
-                "tof": tof,
-                "first_judge_label": first_judge_label,
-                "terminal_judge_label": terminal_judge_label,
-                "turn_records": turn_records,
-            }
-        )
+        result_row = {
+            "question_index": idx,
+            "question": sample.question,
+            "presupposition": sample.presupposition,
+            "correction": sample.correction,
+            "tof": tof,
+            "first_judge_label": first_judge_label,
+            "terminal_judge_label": terminal_judge_label,
+            "turn_records": turn_records,
+        }
 
-        summary = _build_summary_payload(
-            model_id=model_id,
-            language=language,
-            num_questions=len(samples),
-            all_rows=all_rows,
-        )
-        with exp_log_path.open("w", encoding="utf-8") as f:
-            json.dump(summary, f, ensure_ascii=False, indent=2)
-        _upsert_exp1_result(csv_path=csv_path, result=summary)
+        with write_lock:
+            replaced = False
+            for row_pos, existing_row in enumerate(all_rows):
+                if _safe_int(existing_row.get("question_index"), default=-1) == idx:
+                    all_rows[row_pos] = result_row
+                    replaced = True
+                    break
+            if not replaced:
+                all_rows.append(result_row)
 
+            all_rows[:] = _sort_rows_by_question_index(all_rows)
+            summary = _build_summary_payload(
+                model_id=model_id,
+                language=language,
+                num_questions=len(samples),
+                all_rows=all_rows,
+            )
+            with exp_log_path.open("w", encoding="utf-8") as f:
+                json.dump(summary, f, ensure_ascii=False, indent=2)
+            _upsert_exp1_result(csv_path=csv_path, result=summary)
+
+    logger.info("Using %d worker threads for %d remaining samples", workers, len(remaining_question_idx))
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        futures = {executor.submit(_process_question, idx): idx for idx in remaining_question_idx}
+        for future in as_completed(futures):
+            idx = futures[future]
+            try:
+                future.result()
+            except Exception:
+                logger.exception("Sample %d failed", idx)
+                raise
+
+    all_rows = _sort_rows_by_question_index(all_rows)
     summary = _build_summary_payload(
         model_id=model_id,
         language=language,

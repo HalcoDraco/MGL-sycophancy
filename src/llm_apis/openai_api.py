@@ -38,7 +38,7 @@ def openai_chat(
     response = client.chat.completions.create(
         model=model,
         messages=_conversation_to_messages(conversation),
-        max_completion_tokens=max_tokens,
+        # max_completion_tokens=max_tokens,
         reasoning_effort="medium",
     )
 

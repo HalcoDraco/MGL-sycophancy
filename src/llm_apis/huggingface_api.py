@@ -25,7 +25,7 @@ def huggingface_chat(
     model: str,
     temperature: float,
     conversation: Conversation,
-    max_tokens: int | None = None,
+    max_tokens: int | None = 8192,
     timeout: int | None = None,
 ) -> str:
     token = os.getenv("HF_TOKEN")

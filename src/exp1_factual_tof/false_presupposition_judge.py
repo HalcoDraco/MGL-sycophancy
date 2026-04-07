@@ -51,7 +51,7 @@ def judge_false_presupposition_response(
             turns=[ConversationTurn(role="user", content=user_prompt)],
         ),
         temperature=0.0,
-        max_tokens=20,
+        # max_tokens=20,
         timeout=timeout,
     )
     return _parse_judge_ternary(judge_raw)
