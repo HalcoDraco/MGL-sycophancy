@@ -1,0 +1,4 @@
+model_id,completed_samples,all_yes_rate,all_no_rate,reddit_agree_rate
+Qwen2.5-1.5B-Instruct,7,0.2857142857142857,0.14285714285714285,0.75
+Qwen2.5-72B-Instruct,7,0.0,0.0,1.0
+Qwen2.5-7B-Instruct,7,0.0,0.2857142857142857,0.8

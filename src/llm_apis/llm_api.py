@@ -17,6 +17,8 @@ logger = logging.getLogger(__name__)
 class InvalidLLMResponseError(requests.exceptions.RequestException):
     """Raised when a provider returns an empty or malformed text response."""
 
+class RetryableLLMError(requests.exceptions.RequestException):
+    """Raised when an error occurs that may be transient and worth retrying."""
 
 class ProviderModelConfig(TypedDict):
     provider: str
@@ -25,12 +27,12 @@ class ProviderModelConfig(TypedDict):
 
 MODEL_PROVIDER_REGISTRY: Dict[str, List[ProviderModelConfig]] = {
     "llama-3.3-70b-instruct": [
-        {"provider": "groq", "model": "llama-3.3-70b-versatile"},
+        # {"provider": "groq", "model": "llama-3.3-70b-versatile"},
         {"provider": "huggingface", "model": "meta-llama/Llama-3.3-70B-Instruct:novita"},
         {"provider": "github", "model": "meta/Llama-3.3-70B-Instruct"},
     ],
     "llama-3.1-8b": [
-        {"provider": "groq", "model": "llama-3.1-8b-instant"},
+        # {"provider": "groq", "model": "llama-3.1-8b-instant"},
         {"provider": "huggingface", "model": "meta-llama/Llama-3.1-8B-Instruct:novita"},
     ],
     "Hermes-3-Llama-3.1-8B": [
@@ -107,6 +109,9 @@ def _is_retryable_error(exception: BaseException) -> bool:
         return True
 
     if isinstance(exception, InvalidLLMResponseError):
+        return True
+    
+    if isinstance(exception, RetryableLLMError):
         return True
 
     # Some SDKs (notably Hugging Face) may occasionally return malformed JSON.
