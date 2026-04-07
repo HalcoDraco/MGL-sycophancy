@@ -10,6 +10,7 @@ from src.llm_apis.github_models_api import github_models_chat
 from src.llm_apis.google_ai_studio_api import google_ai_studio_chat
 from src.llm_apis.groq_api import groq_chat
 from src.llm_apis.huggingface_api import huggingface_chat
+from src.llm_apis.openai_api import openai_chat
 
 logger = logging.getLogger(__name__)
 
@@ -76,6 +77,9 @@ MODEL_PROVIDER_REGISTRY: Dict[str, List[ProviderModelConfig]] = {
     ],
     "zephyr-7b-beta": [
         {"provider": "huggingface", "model": "HuggingFaceH4/zephyr-7b-beta:featherless-ai"},
+    ],
+    "gpt-5.4": [
+        {"provider": "openai", "model": "gpt-5.4"},
     ],
 }
 
@@ -181,9 +185,18 @@ def _dispatch_chat(
             max_tokens=max_tokens,
             timeout=timeout,
         )
+
+    elif provider == "openai":
+        ai_response = openai_chat(
+            model=model,
+            conversation=conversation,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            timeout=timeout,
+        )
     else:
         raise ValueError(
-            f"Unsupported provider '{provider}'. Supported providers are: github, groq, google_ai_studio, huggingface."
+            f"Unsupported provider '{provider}'. Supported providers are: github, groq, google_ai_studio, huggingface, openai."
         )
 
     if not ai_response or not isinstance(ai_response, str) or not ai_response.strip():
