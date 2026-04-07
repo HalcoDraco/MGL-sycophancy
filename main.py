@@ -34,11 +34,12 @@ def main():
 
     if args.experiment == "1":
         languages = ["en", "es", "ca"]
-        reasoning_test = ["DeepSeek-V3", "DeepSeek-R1"]
-        alignment_test = ["llama-3.1-8b", "Hermes-3-Llama-3.1-8B"]
-        size_test = ["Qwen2.5-1.5B-Instruct", "Qwen2.5-7B-Instruct", "Qwen2.5-72B-Instruct"]
+        reasoning_test = ["DeepSeek-V3", "DeepSeek-R1"] # Non-reasoning vs reasoning models
+        alignment_test1 = ["mistral-7b-sft-beta", "zephyr-7b-beta"] # SFT vs DPO
+        alignment_test2 = ["llama-3.1-8b", "Hermes-3-Llama-3.1-8B"] # RLHF vs DPO
+        size_test = ["Qwen2.5-1.5B-Instruct", "Qwen2.5-7B-Instruct", "Qwen2.5-72B-Instruct"] # Small vs medium vs large models
         family_test = ["Mistral-7B-Instruct-v0.2", "gemma-2-9b-it"]
-        model_ids = reasoning_test + alignment_test + size_test #+ family_test
+        model_ids = reasoning_test + alignment_test2 + size_test #+ family_test
 
         for num_questions in range(1, 50):
             for language in languages:

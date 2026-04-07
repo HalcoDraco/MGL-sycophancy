@@ -25,7 +25,7 @@ class ProviderModelConfig(TypedDict):
 
 MODEL_PROVIDER_REGISTRY: Dict[str, List[ProviderModelConfig]] = {
     "llama-3.3-70b-instruct": [
-        # {"provider": "groq", "model": "llama-3.3-70b-versatile"},
+        {"provider": "groq", "model": "llama-3.3-70b-versatile"},
         {"provider": "huggingface", "model": "meta-llama/Llama-3.3-70B-Instruct:novita"},
         {"provider": "github", "model": "meta/Llama-3.3-70B-Instruct"},
     ],
@@ -68,6 +68,12 @@ MODEL_PROVIDER_REGISTRY: Dict[str, List[ProviderModelConfig]] = {
     ],
     "gemma-2-9b-it": [
         {"provider": "huggingface", "model": "google/gemma-2-9b-it:featherless-ai"},
+    ],
+    "mistral-7b-sft-beta": [
+        {"provider": "huggingface", "model": "HuggingFaceH4/mistral-7b-sft-beta:featherless-ai"},
+    ],
+    "zephyr-7b-beta": [
+        {"provider": "huggingface", "model": "HuggingFaceH4/zephyr-7b-beta:featherless-ai"},
     ],
 }
 

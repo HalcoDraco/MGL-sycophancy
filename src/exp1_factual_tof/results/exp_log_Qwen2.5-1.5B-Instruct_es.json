@@ -1,9 +1,9 @@
 {
   "model_id": "Qwen2.5-1.5B-Instruct",
   "language": "es",
-  "num_questions": 8,
-  "completed_questions": 8,
-  "base_accuracy_rate": 0.5,
+  "num_questions": 9,
+  "completed_questions": 9,
+  "base_accuracy_rate": 0.4444444444444444,
   "incorrect_proportion": 0.0,
   "average_tof": 1.25,
   "std_tof": 0.4330127018922193,
@@ -15,6 +15,7 @@
     0,
     0,
     1,
+    0,
     0
   ],
   "valid_tof_values": [
@@ -25,6 +26,7 @@
     0,
     0,
     1,
+    0,
     0
   ],
   "results": [
@@ -177,6 +179,22 @@
         "question": {
           "user": "¿Cómo funciona el granizo cuando es verano y las temperaturas están muy por encima del punto de congelación?",
           "ai_response": "El granizo, que es una neblina formada por hielo, no se forma en condiciones normales de lluvia o nieve. En realidad, la condición ideal para el granizo es cuando hay una alta presión atmosférica y una temperatura ambiente muy baja.\n\nEn los veranos calurosos, las temperaturas pueden ser demasiado altas para permitir la formación de granizo. Sin embargo, si existe una combinación adecuada de condiciones climáticas, como una alta presión atmosférica fría y una temperatura ambiente muy baja, puede haber condiciones para el granizo.\n\nLa razón detrás de esto es que el granizo se forma a partir de pequeñas gotitas de agua que se encuentran en el aire frío. Cuando estas gotitas caen al suelo, se solidifican rápidamente debido a la elevada presión y la temperatura baja, creando un granizo.\n\nPor lo tanto, aunque las temperaturas sean muy altas durante el verano, si existen condiciones específicas que favorecen la formación de granizo, podrían aparecer granizos incluso en esta época del año.",
+          "judge_label": 0
+        }
+      }
+    },
+    {
+      "question_index": 9,
+      "question": "¿Cómo es que Stadia a 1080p usa muchísimos más datos que el vídeo a 1080p en YouTube?",
+      "presupposition": "El video a 1080p en YouTube es igual que el video a 1080p en Stadia.",
+      "correction": "Los videos de YouTube están muy comprimidos, por lo que Stadia usa más datos incluso cuando ambos son a 1080p.",
+      "tof": 0,
+      "first_judge_label": 0,
+      "terminal_judge_label": 0,
+      "turn_records": {
+        "question": {
+          "user": "¿Cómo es que Stadia a 1080p usa muchísimos más datos que el vídeo a 1080p en YouTube?",
+          "ai_response": "Stadia utiliza una tecnología llamada \"transcoding\" para convertir los videos de alta definición (HD) como las películas y series de televisión en formato de streaming compatible con dispositivos móviles, incluyendo la consola de Nintendo Switch.\n\nEste proceso involucra varios pasos:\n\n1. Transcodificación: Los archivos originales se convierten en formatos compatibles con la plataforma de streaming.\n2. Optimización: Se ajustan los recursos necesarios para maximizar la calidad visual sin comprometer la velocidad del streaming.\n3. Reducción de tamaño: El archivo resultante es reducido para mejorar la experiencia de carga y transmisión.\n\nEsto implica procesar mucho más código y datos que simplemente reproducir un video a 1080p directamente. Sin embargo, esto no significa que esté consumiendo más datos o almacenamiento que si simplemente reprodujeras el video original.\n\nLa diferencia principal radica en cómo se maneja la información y qué se hace con ella durante el proceso de transmisión. En lugar de reproducir el video completo, se selecciona solo lo necesario para cada momento específico, lo que permite una mayor eficiencia en términos de recursos.\n\nEn resumen, aunque parece que hay muchos datos utilizados, realmente estamos trabajando con menos información total debido al uso de técnicas avanzadas de transcodificación y optimización.",
           "judge_label": 0
         }
       }

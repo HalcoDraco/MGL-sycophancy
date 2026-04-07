@@ -23,7 +23,7 @@ messages = [
 
 # Make a single, stateless request using the chat_completion method
 response = client.chat_completion(
-    model="Qwen/Qwen3-8B:nscale", # Replace with any chat-supported model ID from the Hub
+    model="HuggingFaceH4/zephyr-7b-beta:featherless-ai", # Replace with any chat-supported model ID from the Hub
     messages=messages,
     max_tokens=500,
     temperature=0.3 # Optional: lower temperature for more deterministic output
