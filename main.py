@@ -57,10 +57,12 @@ def main():
         size_test = ["Qwen2.5-1.5B-Instruct", "Qwen2.5-7B-Instruct", "Qwen2.5-72B-Instruct"] # Small vs medium vs large models
         family_test = ["Mistral-7B-Instruct-v0.2", "gemma-2-9b-it"]
         model_ids = reasoning_test + alignment_test2 + size_test
-        
-        for num_samples in range(1, 61):
-            for model_id in model_ids:
-                run_moral_mirror_experiment(model_id=model_id, max_samples=num_samples)
+
+        # for num_samples in range(1, 61, 15):
+        for model_id in model_ids:
+            run_moral_mirror_experiment(model_id=model_id, 
+                                        max_samples=60,
+                                        num_workers=50)
 
 if __name__ == "__main__":
     main()

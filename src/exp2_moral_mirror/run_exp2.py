@@ -1,7 +1,9 @@
 import csv
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
 import logging
 import re
+import threading
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
@@ -67,6 +69,14 @@ def _normalize_yes_no(value: Any) -> str:
     if text in {"YES", "NO"}:
         return text
     return "NO"
+
+
+def _sample_index_or_fallback(row: Dict[str, Any]) -> int:
+    return _safe_int(row.get("sample_index"), default=10**12)
+
+
+def _sort_rows_by_sample_index(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    return sorted(rows, key=_sample_index_or_fallback)
 
 
 def _load_dataset(dataset_path: Path, max_samples: int | None) -> List[Dict[str, Any]]:
@@ -206,6 +216,7 @@ def run_moral_mirror_experiment(
     system_prompt: str = "You are a helpful assistant.",
     provider: str | None = None,
     temperature: float = 0.0,
+    num_workers: int = 1,
 ) -> Dict[str, Any]:
     _, dataset_path, output_base = resolve_repo_and_paths(
         data_path=data_path,
@@ -253,27 +264,57 @@ def run_moral_mirror_experiment(
     if existing_summary is not None:
         loaded_rows = existing_summary.get("results", [])
         if isinstance(loaded_rows, list):
-            all_rows = loaded_rows
+            all_rows = _sort_rows_by_sample_index(loaded_rows)
         else:
             logger.warning("Existing summary has invalid results list. Starting from scratch.")
 
-    if len(all_rows) >= len(samples):
+    computed_sample_idx = {
+        idx
+        for idx in (_safe_int(row.get("sample_index"), default=-1) for row in all_rows)
+        if 1 <= idx <= len(samples)
+    }
+    remaining_sample_idx = [
+        idx for idx in range(1, len(samples) + 1) if idx not in computed_sample_idx
+    ]
+
+    logger.info(
+        "Resume status | completed=%d | remaining=%d",
+        len(computed_sample_idx),
+        len(remaining_sample_idx),
+    )
+
+    # Persist a sorted checkpoint at startup so resumes always begin from ordered results.
+    startup_summary = _build_summary_payload(
+        model_id=model_id,
+        num_samples=len(samples),
+        all_rows=all_rows,
+    )
+    with exp_log_path.open("w", encoding="utf-8") as f:
+        json.dump(startup_summary, f, ensure_ascii=False, indent=2)
+    _upsert_exp2_result(csv_path=csv_path, summary=startup_summary)
+
+    if not remaining_sample_idx:
         logger.warning(
             "Existing summary already satisfies requested samples (%d >= %d). Skipping run.",
-            len(all_rows),
+            len(computed_sample_idx),
             len(samples),
         )
-        summary = (
-            existing_summary
-            if existing_summary is not None
-            else _build_summary_payload(model_id=model_id, num_samples=len(samples), all_rows=all_rows)
+        all_rows = _sort_rows_by_sample_index(all_rows)
+        summary = _build_summary_payload(
+            model_id=model_id,
+            num_samples=len(samples),
+            all_rows=all_rows,
         )
+        with exp_log_path.open("w", encoding="utf-8") as f:
+            json.dump(summary, f, ensure_ascii=False, indent=2)
         _upsert_exp2_result(csv_path=csv_path, summary=summary)
         return summary
 
-    completed_count = min(len(all_rows), len(samples))
+    write_lock = threading.Lock()
+    workers = num_workers if num_workers and num_workers > 0 else min(8, max(1, len(remaining_sample_idx)))
 
-    for idx, sample in enumerate(samples[completed_count:], start=completed_count + 1):
+    def _process_sample(idx: int) -> None:
+        sample = samples[idx - 1]
         logger.info("Processing sample %d/%d", idx, len(samples))
 
         response_a, verdict_a = judge_actions(
@@ -305,17 +346,39 @@ def run_moral_mirror_experiment(
                 "ai_response": response_b,
             },
         }
-        all_rows.append(result_row)
 
-        summary = _build_summary_payload(
-            model_id=model_id,
-            num_samples=len(samples),
-            all_rows=all_rows,
-        )
-        with exp_log_path.open("w", encoding="utf-8") as f:
-            json.dump(summary, f, ensure_ascii=False, indent=2)
-        _upsert_exp2_result(csv_path=csv_path, summary=summary)
+        with write_lock:
+            replaced = False
+            for row_pos, existing_row in enumerate(all_rows):
+                if _safe_int(existing_row.get("sample_index"), default=-1) == idx:
+                    all_rows[row_pos] = result_row
+                    replaced = True
+                    break
+            if not replaced:
+                all_rows.append(result_row)
 
+            all_rows[:] = _sort_rows_by_sample_index(all_rows)
+            summary = _build_summary_payload(
+                model_id=model_id,
+                num_samples=len(samples),
+                all_rows=all_rows,
+            )
+            with exp_log_path.open("w", encoding="utf-8") as f:
+                json.dump(summary, f, ensure_ascii=False, indent=2)
+            _upsert_exp2_result(csv_path=csv_path, summary=summary)
+
+    logger.info("Using %d worker threads for %d remaining samples", workers, len(remaining_sample_idx))
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        futures = {executor.submit(_process_sample, idx): idx for idx in remaining_sample_idx}
+        for future in as_completed(futures):
+            idx = futures[future]
+            try:
+                future.result()
+            except Exception:
+                logger.exception("Sample %d failed", idx)
+                raise
+
+    all_rows = _sort_rows_by_sample_index(all_rows)
     summary = _build_summary_payload(
         model_id=model_id,
         num_samples=len(samples),
