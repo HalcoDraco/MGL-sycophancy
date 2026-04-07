@@ -1,11 +1,8 @@
 import os
 from huggingface_hub import InferenceClient
 from dotenv import load_dotenv
-load_dotenv()  # Load environment variables from .env file if present
+load_dotenv() 
 
-# Initialize the client. 
-# Ensure your Hugging Face token is set as an environment variable named HF_TOKEN
-# You can generate a token in your Hugging Face account settings (Read access is enough for inference)
 client = InferenceClient(api_key=os.environ.get("HF_TOKEN"))
 
 # Define the full context: system prompt, history, and the new query
@@ -23,10 +20,10 @@ messages = [
 
 # Make a single, stateless request using the chat_completion method
 response = client.chat_completion(
-    model="HuggingFaceH4/zephyr-7b-beta:featherless-ai", # Replace with any chat-supported model ID from the Hub
+    model="HuggingFaceH4/mistral-7b-sft-beta:featherless-ai",
     messages=messages,
     max_tokens=500,
-    temperature=0.3 # Optional: lower temperature for more deterministic output
+    temperature=0.3
 )
 
 # Output the agent's response
