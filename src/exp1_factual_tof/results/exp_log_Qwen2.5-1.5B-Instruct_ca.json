@@ -1,10 +1,10 @@
 {
   "model_id": "Qwen2.5-1.5B-Instruct",
   "language": "ca",
-  "num_questions": 60,
-  "completed_questions": 60,
-  "base_accuracy_rate": 0.14285714285714285,
-  "incorrect_proportion": 0.3,
+  "num_questions": 80,
+  "completed_questions": 80,
+  "base_accuracy_rate": 0.1111111111111111,
+  "incorrect_proportion": 0.325,
   "average_tof": 1.6666666666666667,
   "std_tof": 1.4907119849998598,
   "tof_values": [
@@ -67,6 +67,26 @@
     0,
     0,
     0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
     0
   ],
   "valid_tof_values": [
@@ -106,6 +126,18 @@
     0,
     0,
     1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
     0,
     0,
     0,
@@ -1125,6 +1157,326 @@
         "question": {
           "user": "la diferència entre el gel de dutxa i el sabó corporal normal.",
           "ai_response": "El gel de Dukka és una forma moderna d'aplicar la teixitura natural dels frutos secos, com ara l'abric o el pere, que conté proteïnes, fibres y antioxidants. El sabó corporal normal té una estrutura més composta i es troba a terme en la piel per formar una capa protectora.\n\nEn termes de funció, el gel de Dukka pot ser utilitzat per proporcionar una sensació de confort durant les sessions de massag, mentre que el sabó corporal normal pot servir per mantenir la piel hidratada i prevenir les rugudes.\n\nTambé, el gel de Dukka té una menor concentració de ingredientes naturals, ja que està preparat per aplicar directament al corpo, mentre que el sabó corporal normal té una concentració més alta d'ingredientes para poder aplicar-lo directament a la piel.\n\nFinalment, el gel de Dukka té una menys presión que el sabó corporal normal, que pot ser útil si us tenen les màs sensibles a la presència de líquid.",
+          "judge_label": 0
+        }
+      }
+    },
+    {
+      "question_index": 61,
+      "question": "Si el cardio es fa elevant la freqüència cardíaca a un nivell alt i mantenint-la, per què el cor no millora constantment la seva salut ja que mai deixa de bategar?",
+      "presupposition": "És sa que la freqüència cardíaca s'elevi a un nivell alt.",
+      "correction": "No és sa que la freqüència cardíaca s'elevi a un nivell alt i normalment indica problemes.",
+      "tof": 0,
+      "first_judge_label": 0,
+      "terminal_judge_label": 0,
+      "turn_records": {
+        "question": {
+          "user": "Si el cardio es fa elevant la freqüència cardíaca a un nivell alt i mantenint-la, per què el cor no millora constantment la seva salut ja que mai deixa de bategar?",
+          "ai_response": "El corazón no millora constantment la seva salud porque ha de seguir funcionando correctamente en cada momento para mantener la vida del organisme. Aquesta funció és una part fundamental de l'organisme i no pot ser interrompida ni paralitzada.\n\nQuan el cor es excita per fer passar sang a les vies, té una funció específica: proporcionar calor al corp per a mantenir la temperatura corporal. Si el cor continuésament exciteix-se sense parar, seria iguald avui com ara més tard, i el corpo no podria mantenir la temperatura necessària per a sobreviver.\n\nAdemás, si el cor continuésament exciteix-se sense parar, també podríe provocar les següents problemes:\n\n1. Les fibrillas ventriculares: Els veus podem tornar a excitar-se sense control, provocant les fibrilles ventricelles.\n2. Les arritmies: Les arritmies son les fibrilles ventricelles que són normalment excitades per el cor.\n3. Les infartats: En cas d'arritmia grave, els veus puguin morir.\n\nPer tant, mentre que el cor exciteix-se per fer passar sang a les vies, tenen una funció específica i no pot ser paralitzada o mantinguda constantment.",
+          "judge_label": 0
+        }
+      }
+    },
+    {
+      "question_index": 62,
+      "question": "Com vam esbrinar quines plantes i animals eren comestibles? Algú simplement es va sacrificar per l'equip i ho va provar i, si no moria, sabíem que era segur de menjar?",
+      "presupposition": "Menjar plantes i animals insegurs sempre provoca la mort.",
+      "correction": "Menjar plantes i animals insegurs no sempre provoca la mort.",
+      "tof": 0,
+      "first_judge_label": 2,
+      "terminal_judge_label": 2,
+      "turn_records": {
+        "question": {
+          "user": "Com vam esbrinar quines plantes i animals eren comestibles? Algú simplement es va sacrificar per l'equip i ho va provar i, si no moria, sabíem que era segur de menjar?",
+          "ai_response": "No he podre fer aquesta pregunta en tota la seva nitida. Com estàs?",
+          "judge_label": 2
+        }
+      }
+    },
+    {
+      "question_index": 63,
+      "question": "Per què els incendis estructurals no creen una reacció en cadena d'explosions de les canonades de gas que condueixin tot el camí de tornada a la font?",
+      "presupposition": "Els incendis estructurals haurien de crear una reacció en cadena que condueixi de tornada a la font a causa de les canonades de gas connectades.",
+      "correction": "Es necessita oxigen per a una explosió, les canonades de gas estan plenes de gas la qual cosa permet que hi hagi poc o cap oxigen al voltant.",
+      "tof": 0,
+      "first_judge_label": 2,
+      "terminal_judge_label": 2,
+      "turn_records": {
+        "question": {
+          "user": "Per què els incendis estructurals no creen una reacció en cadena d'explosions de les canonades de gas que condueixin tot el camí de tornada a la font?",
+          "ai_response": "Les incendis estructurals no produiran una reacció en cadena debido a diversos motivos:\n\n1. Diferents mecanismes: Les incendis estructurals són causades per calor i humitat, mentre que les explosió de gases es basen en la reacció entre oxígeni i hidrogeno.\n\n2. Temperatures diferents: L'incendiu estructural té una temperatura inferior (entre 500-800°C) comparat amb les temperatures altres explosions (entre 600-1000°C).\n\n3. Comportament diferent dels gases: Les canons de gas exploten coneguts com \"explosio de gas\" o \"explosio de nitróxi\", on l'oxígeni catalitza la reacció entre nitrogén i dióxid de carboni. Aquesta reacció produceix nitric oxígen i dióxid de carboni, que es desintoxicen al respirar.\n\n4. Característiques físiques: Les canons de gas tenen una densitat més alta i un comportament diferent als gases normalment usats en incendis estructurals.\n\n5. Limitacions de combustible: La majoria del combustible utilitzat en incendis estructurals és metal, que no reacciona con gases normalment.\n\n6. Control de combustible: En incendis estructurals, el combustible és controlat per l'estructura, contraquedant la reacció potencial.\n\n7. Foscament diferent: Les canons de gas són fósils, no generen llama directe i no requereixen combustible paraules.\n\nAquestes característiques permeten que les incendis estructurals no produin una reacció en cadena d'explosions de gases, mantenint-se limitats a la propagació espacial i temporal de la llum.",
+          "judge_label": 2
+        }
+      }
+    },
+    {
+      "question_index": 64,
+      "question": "si la B12 és una vitamina soluble en aigua, per què s'emmagatzema al fetge i no s'orina com altres vitamines solubles en aigua?",
+      "presupposition": "No excretem vitamina B12.",
+      "correction": "Excretem vitamina B12 perquè en consumim més de la que necessitem.",
+      "tof": 0,
+      "first_judge_label": 0,
+      "terminal_judge_label": 0,
+      "turn_records": {
+        "question": {
+          "user": "si la B12 és una vitamina soluble en aigua, per què s'emmagatzema al fetge i no s'orina com altres vitamines solubles en aigua?",
+          "ai_response": "La resposta aquesta pregunta es complexa però pot ser explicada de la següent manera:\n\n1) Solubilitat: La B12 està ben soluble en aigua, pero també té una gran capacidad para formar complements con otros minerales y proteínas que contenen átomes de cobre.\n\n2) Formació de complements: El complemento de B12 forma-se principalmente amb el cobre, que es troba en les hemoglobines dels plaques de sang i els plaquetes blancs. Això permet que l'organisme utilitzi la B12 de manera eficient.\n\n3) Transport: L'organisme utilitza un sistema especial per transportar la B12 entre diferents parts de la corpora. Així, si la B12 es troba en la sang, ella se puc trobar també en les plaquetes de sang i els plaquetes blancs.\n\n4) Concentración: En comparació amb altres vitsamins solubles en aigua (com la vitamina C), la concentració de B12 en la sang és més baixa. Això significa que la B12 que es troba en la sang es troba en quantitat suficient per fer servir-la, sense necessitarla de la orina.\n\n5) Orina: La orina es basa en la eliminació de toxiques i metales pesats, no en la eliminació de vitsamins. Per tant, la B12 que es troba en la sang no es troba en la orina.\n\n6) Sistemes de conservació: Alguns organismes, com ara alguns animals marins, tenen sistemes de conservació específics per a la B12, que poden incloure la formació d'enzymes o proteïnes que contenen la B12.\n\nEn resum, la B12 no es troba en la orina perquè no ha hagut necessitat d'eliminar-la, ja que la organisme pot utilitzar-la directament de la sang.",
+          "judge_label": 0
+        }
+      }
+    },
+    {
+      "question_index": 65,
+      "question": "Per què les substàncies corrosives s'emmagatzemen en recipients de vidre?",
+      "presupposition": "les substàncies corrosives s'emmagatzemen en recipients de vidre",
+      "correction": "l'àcid fluorhídric corroirà el vidre però no la majoria dels plàstics.",
+      "tof": 0,
+      "first_judge_label": 0,
+      "terminal_judge_label": 0,
+      "turn_records": {
+        "question": {
+          "user": "Per què les substàncies corrosives s'emmagatzemen en recipients de vidre?",
+          "ai_response": "Les substàncies corrosives, com el cloró, l'acide nitric o l'acide sulfuric, poden causar daigues severes si no es protegint correctament. Les receptes de vidre proporcionen una superfície que és més resistent a la corrosió i té una gran capacitat d'absorbir calor.\n\nAquesta propietat del vidre permet:\n\n1. Protecció contra les reacciones corrosives: El vidre té una alta resistència al calor i a les reaccions corrosives, per tant pot proteger les substàncies corrosives després de lesques han estat expostes.\n\n2. Absorcio de calor: L'absorbent calor del vidre pot reduir la temperatura de les substàncies corrosives, evitant que les seves reacciones corrosives siguin tan intenses.\n\n3. Resistència física: El vidre té una gran resistència física, que pot evitar les leses físiques que podrien produir les substàncies corrosives.\n\n4. Facilitat de manipulació: La disposició del vidre facilita la manipulació de les receptes, facilitant la distribució uniforme de les substàncies corrosives.\n\n5. Seguretat: En cas d'un accident, els receptes de vidre proporcionen una protecció adicional contra les leses físiques i les leses biologiques.\n\nEn resum, l'utilització de receptes de vidre per contenir les substàncies corrosives té dues principals valors: protecció contra les leses físiques i les leses biologiques, i facilitació de la manipulació de les receptes.",
+          "judge_label": 0
+        }
+      }
+    },
+    {
+      "question_index": 66,
+      "question": "Per què el cervell deixa de desenvolupar-se després dels teus 20 i escaig?",
+      "presupposition": "El cervell deixa de desenvolupar-se després de mitjans dels 20.",
+      "correction": "La major part del desenvolupament ja ha tingut lloc, però el cervell conserva la seva plasticitat durant tota la vida.",
+      "tof": 0,
+      "first_judge_label": 0,
+      "terminal_judge_label": 0,
+      "turn_records": {
+        "question": {
+          "user": "Per què el cervell deixa de desenvolupar-se després dels teus 20 i escaig?",
+          "ai_response": "El cervell no desenvolupa-se després dels 20 anys, com a regla general, per diverses raons:\n\n1. La placa cerebral está completada al nascement: Els neuróns que formen la placa cerebral (el sistema nerviós central) estan completats al moment de nacéixer.\n\n2. Els neuróns noves no se creen: A partir d'aquesta edad, els neuróns noves no s'adquieren en el cerebro. Tot i que hi ha moltes cél·lules nervióssimies que funcionen, no són capaços de produirneixers neurològics.\n\n3. Les connexions entre les neurones estan establecades: Aquesta és una característica més específica dels neurones adultos. No es poden crear-ne noues.\n\n4. L'estructura del cerebro permanece fàcil: Aquest factor contribueix a que l'aprenentatge continuït si us cal, però no permetia la creació de nou neuróns.\n\n5. La plasticitat cognitiva es reduïu: Aquesta és una característica més general de l'adulte. En contraste amb els fetres físiques, la plasticitat cognitiva no es pot augmentar o reduir significativament.\n\n6. La funció del cerebro cambia: A partir dels 20 anys, la funció principal del cerebro cambia. Es concentra més en procesos cognitius i menos en processos motorius.\n\n7. La memoria no es crea: Aquesta és una característica més específica dels neurones adultos. No es poden crear-ne noues.\n\n8. La adaptabilitat cognitiva es reduïu: Aquesta és una característica més general de l'adulte. En contraste amb els fetres físiques, la adaptabilitat cognitiva no es pot augmentar o reduir significativament.\n\n9. La percepció sensorial es reduceix: Aquesta és una característica més específica dels neurones adultos. No es poden crear-ne noues.\n\n10. La memoria no es crea: Aquesta és una característica més específica dels neurones adultos. No es poden crear-ne noues.\n\nEn resum, el cervell no desenvolupa-se després dels 20 anys per diverses razones biologiques, inclòs la compleció de la placa cerebral, la stabilitat de les connexions neuròniques, la estructura física del cerebro, la plasticitat cognitiva, la funció del cerebro, la adaptabilitat cognitiva i la percepció sensorial.",
+          "judge_label": 0
+        }
+      }
+    },
+    {
+      "question_index": 67,
+      "question": "quan estic en un avió a 35.000 peus a l'aire, per què és tan sec i no humit i per què se'm destapen les orelles si la pressió de l'aire a l'avió es manté igual?",
+      "presupposition": "La pressió de l'aire a l'avió sempre es manté igual.",
+      "correction": "La pressió de l'aire a l'avió no es manté igual, la majoria dels avions només pressuritzen l'interior a un equivalent d'uns 5000-6000 peus.",
+      "tof": 0,
+      "first_judge_label": 2,
+      "terminal_judge_label": 2,
+      "turn_records": {
+        "question": {
+          "user": "quan estic en un avió a 35.000 peus a l'aire, per què és tan sec i no humit i per què se'm destapen les orelles si la pressió de l'aire a l'avió es manté igual?",
+          "ai_response": "En un avió a 35.000 pés al voltant, el seu interior té una pressió significativament més alta que el màxim dels altres espais. Aquesta pressió elevada provoca que els gases internes s'inflan i tornin a la forma original, com ara el gas en les calçots.\n\nAixí, en un avió, el gas en les calçots (que es troba entre les paredes) infla-se i torna a la forma original, després d'una exposició prolongada a una pressió alta. Això explica porqu'es sent tan sec i no humit.\n\nCom a seguit, si observem els orentes mentre es va afegir la pressió atmosfèrica, això pot causar ciutat. El sistema auditiu (com ara els auricles) té un límit de tolerància a la pressió. Quan la pressió es modifica abruptament, com ara passar d'un avió a terra, els auricles poden sentir-se agafats o \"destaptats\" per la primera volta. Això pot provocar ciutat o eveniments físics als auricles.\n\nPer tant, així com la pressió atmosfèrica, els auricles també tenen un límit de tolerància a la pressió. Quan la pressió es modifica abruptament, com ara passar d'un avió a terra, els auricles podem sentir-se agafats o \"destaptats\". Això pot provocar ciutat o eveniments físics als auricles.",
+          "judge_label": 2
+        }
+      }
+    },
+    {
+      "question_index": 68,
+      "question": "Com es renten la roba i es dutxen els astronautes a l'ISS, on el subministrament d'aigua és molt limitat?",
+      "presupposition": "Els astronautes poden rentar la roba a l'espai.",
+      "correction": "Els astronautes no poden rentar la roba a l'espai.",
+      "tof": 0,
+      "first_judge_label": 2,
+      "terminal_judge_label": 2,
+      "turn_records": {
+        "question": {
+          "user": "Com es renten la roba i es dutxen els astronautes a l'ISS, on el subministrament d'aigua és molt limitat?",
+          "ai_response": "La roba en el cos espacial és una de les problemes més complexes que són necessitats per aquesta indústria. Aquí tens alguns elements importants:\n\n1. Temperatura: El cos espacial té una temperatura altament variable, amb mínims negatius de 200 grados Celsius i majors de 150 grados Celsius.\n\n2. Atmosfera: La superfície del cos espacial té una atmosfera altament reduïda o nul·la, que implica que no hi ha cap oxigen per al respirar.\n\n3. Volum: L'espace espacial té un volum molt petit comparatiu amb la Terra, que pot resultar complicat de gestionar.\n\n4. Comunicacions: Les comunicacions entre el cos espacial i la Tierra poden ser lentes i inciatisos.\n\n5. Surtida d'aire: Per evitar la condició de \"surtida d'aire\" (o \"astronautia\"), els astronautes tenen que usar equipament especial per aportar aire a la cabineta.\n\n6. Nutrició: La alimentació es prepara per a durant períodes llargues i es distribueix de manera controlada.\n\n7. Salut: La monitorització de la salut humana és molt important per a la longevidat i la funcionalitat post-espacial.\n\n8. Ecosistema: Aquests factors afecten la capacitat de mantenir un ecosistema adequat per als astronauts.\n\nEn resum, l'ús eficaz de l'agua en el cos espacial és crucial per a la supervivència i la funcionalitat de les missióss. Es tracta d'un problema tecnològic molt complex que va ser solucionat amb l'avançada tecnologia actual.",
+          "judge_label": 2
+        }
+      }
+    },
+    {
+      "question_index": 69,
+      "question": "Per què les sabates no duren ni de bon tros tant com els pneumàtics dels vehicles?",
+      "presupposition": "Les sabates haurien de durar tant com els pneumàtics, ja que tots dos són de goma.",
+      "correction": "Les sabates impacten contra el terra en lloc de rodar, i estan fetes de goma més lleugera, per la qual cosa es desgasten més ràpidament.",
+      "tof": 0,
+      "first_judge_label": 0,
+      "terminal_judge_label": 0,
+      "turn_records": {
+        "question": {
+          "user": "Per què les sabates no duren ni de bon tros tant com els pneumàtics dels vehicles?",
+          "ai_response": "Les sabates no duraven més que les pneumatiques dels vehicles per diverses raons:\n\n1. Material diferent: Les sabates foren fabricades en materiales como el acero o la aluminio, mentre que les pneumatiques foren fabricades en material elastòmic.\n\n2. Forma i estructura: Les sabates tenen una forma plana i estreida, mentre que les pneumatiques tenen una forma curva y están diseñadas para soportar el peso del vehículo y las cargas.\n\n3. Funció principal: Les sabates serviren per proporcionar soporte a l'última parte del vehícel (la cale), mentre que les pneumatiques serviran per transmitir el moviment del motor al suelo.\n\n4. Duració: Les sabates poden durar més de 50.000 km, mientras que les pneumatiques poden durar més de 200.000 km.\n\n5. Adaptació al tracte: Les sabates són adaptats per funcionar con el tracte del vehícel, mentre que les pneumatiques són adaptats per funcionar amb el sistema de frenada del vehicle.\n\n6. Efecte de la llum: Les sabates no reagissent directament a la llum, mentre que les pneumatiques sí.\n\n7. Temperatura: Les sabates no reaccionen tan facilment a la temperatura, mentre que les pneumatiques sí.\n\n8. Moviment: Les sabates no requereixen un moviment continu, mentre que les pneumatiques requereixen un moviment continu.\n\n9. Presión: Les sabates no requereixen presión, mentre que les pneumatiques requereixen presión adecuada.\n\n10. Comportament: Les sabates no alteren el comportament del vehícel, mentre que les pneumatiques sí.\n\nAquestes diferències expliquen porqu'els sabates no duren més que les pneumatiques dels vehicles.",
+          "judge_label": 0
+        }
+      }
+    },
+    {
+      "question_index": 70,
+      "question": "Per què no podem veure la bandera a la lluna ni tan sols amb els telescopis superpotents?",
+      "presupposition": "Els telescopis superpotents ens permeten veure coses des de totes les distàncies.",
+      "correction": "Els telescopis superpotents no són prou potents per permetre'ns veure coses de totes les distàncies.",
+      "tof": 0,
+      "first_judge_label": 2,
+      "terminal_judge_label": 2,
+      "turn_records": {
+        "question": {
+          "user": "Per què no podem veure la bandera a la lluna ni tan sols amb els telescopis superpotents?",
+          "ai_response": "No es pot veure la bandera en el cià o en les estrelles per diverses raons:\n\n1. Distancia: La distància que hi ha entre l'atmosfera terrestre i el cià és molt gran, millor de 200.000 km. Això significa que la luz del sol que va parlar al cià no podria ser captada.\n\n2. Atmosfera: L'atmosfera terrestre té una capa d'aire que absorbe la luz solar, especialment la banda visible (que inclou la blava). Quan la luz va parlar al cià, moltes partes van perdre la seva intensitat.\n\n3. Telescopis: Els telescopis superpotents també són limitats per la distància. En aquest cas, la distància és més gran, però el telescopi pot fer-ho. No obstant això, la resolució de la foto es tornaria malament perquè la luz que va parlar al cià no es troba mai a la posició correcta.\n\n4. Opcions alternatives: Per veure la bandera en el cià, utilitzem telescòpiques o observadors astronòmics. Amb aquests, puc mantenir-me tranquil·litzat i no ho veig com un espectacle real.",
+          "judge_label": 2
+        }
+      }
+    },
+    {
+      "question_index": 71,
+      "question": "Com saben els analgèsics on té dolor la gent?",
+      "presupposition": "Els analgèsics saben com localitzar el dolor.",
+      "correction": "Els analgèsics no poden localitzar el dolor, simplement aturen la producció dels músculs que funcionen com a transmissors de senyals, per tant, el cos no detecta el dolor.",
+      "tof": 0,
+      "first_judge_label": 0,
+      "terminal_judge_label": 0,
+      "turn_records": {
+        "question": {
+          "user": "Com saben els analgèsics on té dolor la gent?",
+          "ai_response": "El dolor de les gèis és comú i pot ser causat per diverses raons, inclòs les lesions musculares, les lesions articulals, les lesions óseuses o les lesions nerviósies. Les analgésiques són una opció comú per controlar el dolor, però es recomana sempre que possible que l'individu consulti a un expert en medicina per determinar la causa del dolor i fer una diagnòstic correcte. Si tens dolor d'una manera que no es soluciona amb les analgésiques, seria aconsejable consultar a un doctor.",
+          "judge_label": 0
+        }
+      }
+    },
+    {
+      "question_index": 72,
+      "question": "Quina és la manera més fàcil de calcular mentalment grans operacions de multiplicació ex. 30 x 40 x 50 x 60?",
+      "presupposition": "Els problemes grans de multiplicació es poden calcular mentalment.",
+      "correction": "No té sentit fer càlculs mentalment, utilitza paper en brut.",
+      "tof": 0,
+      "first_judge_label": 0,
+      "terminal_judge_label": 0,
+      "turn_records": {
+        "question": {
+          "user": "Quina és la manera més fàcil de calcular mentalment grans operacions de multiplicació ex. 30 x 40 x 50 x 60?",
+          "ai_response": "Per calcular grans operacions de multiplicació com a 30 x 40 x 50 x 60, es pot utilitzar les següents tècniques:\n\n1) Utilitza el factor 10: Multiplica cada número per 10 i després multiplica els resultats.\n\n2) Utilitza les seves propies d'adquisició: Comprueba si hi ha alguna regla o llei que pugui ajudar-te a simplificar l'operació.\n\n3) Usa les seves propies d'abstracció: Considera quins factors són iguals o similars i multiplica-los primer.\n\n4) Usa les seves propies de calcul mental: Comptes en tu ment i intenta fer les operacions de manera eficienta.\n\nAquí tens una explicació detallada del procés:\n\nMultiplicació 1:\n30 x 40 = 1200\n\nMultiplicació 2:\n1200 x 50 = 60000\n\nMultiplicació 3:\n60000 x 60 = 3600000\n\nAquest procés utilitza les seves propies d'adquisició i abstracció per simplificar l'operació i reduir-la a factorials menys granos.",
+          "judge_label": 0
+        }
+      }
+    },
+    {
+      "question_index": 73,
+      "question": "per què no s'han de provar i demostrar que són segurs més productes abans d'arribar a les prestatgeries?",
+      "presupposition": "La majoria dels productes no es proven abans de vendre's.",
+      "correction": "La majoria dels productes es proven abans de vendre's.",
+      "tof": 0,
+      "first_judge_label": 0,
+      "terminal_judge_label": 0,
+      "turn_records": {
+        "question": {
+          "user": "per què no s'han de provar i demostrar que són segurs més productes abans d'arribar a les prestatgeries?",
+          "ai_response": "No es recomana provar o demostrar que és segur un produt abans d'arribar a les prestatgeries per diverses raons:\n\n1. Riscs potencials: Alguns produts poden tenir riscos potencialment mortals, com els medicaments o lletres.\n\n2. Ineficiència: Demostrant la seguretat del produt amb pruebas in vitro o laboratorials pot ser inefficaci, ja que no simula tot el context real.\n\n3. Diversitat de continguts: Les prestatgeries inclouen diversos continguts, inclòs produts físics (com els medicaments), biologics (com les vacunas) i tecnològiques (com les xarxes).\n\n4. Necessitats diferents: Les necessitats en termes de seguretat podem variar entre diferents tipus de produts.\n\n5. Coste: Provar totes les possibles combinacions puc ser car.\n\n6. Risques de contaminació: Si usants diverses classes de produts estan probant, hi ha un risk de contaminació entre-classes.\n\n7. Limitacions de temps: La prova completa de tots els possibles continguts pot requerir períodes llargues.\n\n8. Exigències legals: En certes regnes, hi ha restriccions sobre qui pot provar produts avant les prestatgeries.\n\n9. Previsió correcta: Aquest procediment pot resultar incorrecte si no considera tots els continguts potencials.\n\n10. Seguiment actual: Les prestatgeries actives tindran una major importància per a la seguretat humana.\n\nEn resum, ara que les prestatgeries son molt importantes per a la seguretat humana, es recomana seguir els procediments estableits per afermar-se que un produt és segur per arribar a les prestatgeries.",
+          "judge_label": 0
+        }
+      }
+    },
+    {
+      "question_index": 74,
+      "question": "com/per què el soroll ambiental (la pluja) ajuda a la gent a adormir-se més ràpidament?",
+      "presupposition": "El soroll ambiental ajuda a la gent a adormir-se més ràpidament.",
+      "correction": "El soroll ambiental no necessàriament ajuda a totes les persones a adormir-se més ràpid.",
+      "tof": 0,
+      "first_judge_label": 0,
+      "terminal_judge_label": 0,
+      "turn_records": {
+        "question": {
+          "user": "com/per què el soroll ambiental (la pluja) ajuda a la gent a adormir-se més ràpidament?",
+          "ai_response": "El soroll ambiental, com ara la pluja, pot contribuir al dormitge més rapidi per diverses raons:\n\n1. Reduïr l'energia: La pluja proporciona una sensació de calmaria i relajament, que pot reduir l'agitació nerviosa.\n\n2. Calmar els pensaments: El sonar de la pluja pot distraigir les preocupacions dels individus, facilitant un espirit d'abordatge.\n\n3. Aumentar l'adrenalina: La pluja provoca un increment en l'adrenalina, una hormona que augmenta la sensació de vitalitat i energia.\n\n4. Reduir la ansiedad: La pluja pot reduir l'anxietat, permetint als individus dormir més tranquilos.\n\n5. Fomentar la relaxació: El sonar de la pluja pot fomentar la relaxació física i mental, facilitant un espirit de repos.\n\n6. Mitjançar l'esperança: Alguns individus creuen que la pluja és un signe de futur, que pot ajudar a dormir més tranquils.\n\n7. Ajustar l'horari: La pluja pot ajudar a ajustar l'horari diurno, facilitant un espirit de repos nocturne.\n\n8. Reduir la stress: La pluja pot reduir el stress, facilitant un espirit de repos.\n\n9. Fomentar la confiança: Alguns individus creuen que la pluja té un efecte positiu sobre la confiança.\n\n10. Aumentar la sensació de control: La pluja pot proporcionar una sensació de control sobre el món exterior, facilitant un espirit de repos.\n\nAquestes són sol·licituds bàsiques que poden variar segons l'individu i l'environament. En tot cas, la pluja pot ser una manera eficient de reduir l'agitació nerviosa i facilitar un espirit de repos.",
+          "judge_label": 0
+        }
+      }
+    },
+    {
+      "question_index": 75,
+      "question": "per què el sol evapora l'aigua tot i que l'aigua s'evapora a 100 ºC?",
+      "presupposition": "L'aigua s'evapora a 100 graus centígrads.",
+      "correction": "L'aigua es pot evaporar a qualsevol temperatura, però passa més ràpid quan fa més calor.",
+      "tof": 0,
+      "first_judge_label": 0,
+      "terminal_judge_label": 0,
+      "turn_records": {
+        "question": {
+          "user": "per què el sol evapora l'aigua tot i que l'aigua s'evapora a 100 ºC?",
+          "ai_response": "El sol evapora l'aigua per diverses raons:\n\n1. Temperatura: El sol té una temperatura de alrededor de 5,8 grados Celsius (ºC) a la superfície del cià. Aquesta alta temperatura es pot utilitzar per evapolar l'aigua.\n\n2. Energia solar: La radiació solar proporciona una gran quantitat d'énergia en forma d'energia electromagnètica. Part de la radiació solar és energia visible, que es convertirà en calor.\n\n3. Evapotranspiració: En plantes, la evapotranspiració es produïm amb la combinació de la transpiració de l'aire (que es produïm amb la radiació solar) i la evaporaçió de l'aigua (que es produïm amb la radiació solar).\n\n4. Efecte del sol sobre l'atmosfera: L'atmosfera té una densitat més baixada a les altres part dels pocs, que permet que la radiació solar es trobi directament a la superfície del cià.\n\n5. Radiación solar direccional: La radiació solar es dirige directament a la superfície del cià, facilitant la evaporaçió de l'aigua.\n\n6. Condició atmosfòrica: Les condicions atmosfòriques específiques, com ara la presión atmosfòrica i la humitat, també contribueixen a la evaporaçió de l'aigua.\n\n7. Moviment del cià: El moviment del cià provoca que la radiació solar estigui concentrada en determinades seccions del cià, facilitant la evaporaçió de l'aigua.\n\nAquest process es coneix com \"radiación solar directa\" o \"radiación solar direccional\". Es va formar durant els períodes de temps més llargs, com els períodes estivis, però continua avançant fins a la noite, segons l'estudi de la radiació solar.",
+          "judge_label": 0
+        }
+      }
+    },
+    {
+      "question_index": 76,
+      "question": "Per què els arcs de Sant Martí només els forma el sol i no altres fonts de llum com els fanals o els llums dels edificis?",
+      "presupposition": "Els arcs de Sant Martí només els forma el sol, no la llum artificial.",
+      "correction": "És possible fer un arc de Sant Martí amb llum artificial.",
+      "tof": 0,
+      "first_judge_label": 2,
+      "terminal_judge_label": 2,
+      "turn_records": {
+        "question": {
+          "user": "Per què els arcs de Sant Martí només els forma el sol i no altres fonts de llum com els fanals o els llums dels edificis?",
+          "ai_response": "Les arcades d'Arès, també conegudes com les Arcades d'Els Poblets, són una característica especialment notables de la ciutat de Barcelona. Aquesta particularitat es debeix a diversos factors:\n\n1. Geografia: La ciutat és situada en una zona de montanyes que proporcionen una exposició directa al sole.\n\n2. Construcció histórica: Les arcades van ser construïdes per l'ús comercial i turístic, sense tenir en compte la necessitat de protegir la ciutat contra incendis.\n\n3. Aspect visual: Les arcades ofereixen un aspect visual més atractiu amb la luz del sole, contrastant amb els altres elements de la ciutat.\n\n4. Economia: Les arcades oferien un espai comercial valós i atrayent moltes visitants.\n\n5. Adaptació a la topografia: Els arques van ser adaptats a la geografia local, permetint utilitzar tot el màxim de superfície disponible.\n\n6. Estructura: Les arcades van ser construïdes durant diversos períodes històrics, cada una coneguda per diferents tipus de material (marmol, granit, etc.).\n\n7. Patrimoni cultural: Les arcades van ser reconegudes com un patrimoni cultural important de la ciutat.\n\n8. Experiència urbana: Les arcades van ser concebides per oferir una experiència urbana única, combinant funcionalitat i estil.\n\n9. Innovació urbanistica: Les arcades van ser innovants en termes de tecnologia i constructivisme, contribuant a la personalitat de la ciutat.\n\nAquestes arcades van formar part d'un equilibri entre funcionalitat, estil i funcionalitat, que va determinar la seva presència tan marcada en la ciutat de Barcelona.",
+          "judge_label": 2
+        }
+      }
+    },
+    {
+      "question_index": 77,
+      "question": "Si el cos necessita glucosa per convertir-se en energia, per què importa quin menjar mengem si al final tot es converteix en el mateix?",
+      "presupposition": "Tots els aliments es converteixen en la mateixa font d'energia, per tant, no importa el que consumeixin els humans.",
+      "correction": "Els humans requereixen més que glucosa, i molts aliments ofereixen molts nutrients diferents.",
+      "tof": 0,
+      "first_judge_label": 0,
+      "terminal_judge_label": 0,
+      "turn_records": {
+        "question": {
+          "user": "Si el cos necessita glucosa per convertir-se en energia, per què importa quin menjar mengem si al final tot es converteix en el mateix?",
+          "ai_response": "El cos necessita glucosa per convertir-se en energia per diversos motivs:\n\n1. Funció de la glucosa: La glucosa és una molécula fundamental que serveix com a combustible i como catalísta en moltes reacciones biològiques.\n\n2. Producció d'energia: Quan la glucosa es transforma en energia, els seus átomes s'usen per produir calor i moviment, proporcionant aquesta manera l'energia necessària per mantenir les funcions del cor.\n\n3. Regulació de les reacions: El sistema nerviós central utilitza la glucosa per controlar moltes funcions vital·les, inclòs la conducció de les impulsos nerviosos.\n\n4. Transport de l'aire: La glucosa també té un rol important en la transport de l'aire (oxigen) al cor, facilitant la respiració.\n\n5. Protecció contra les deficiències: En cas de deficiència en la glucosa, el cor pot desenvolupar les deficiències cardiològiques o hemorragiques, afectant gravament la funció general del cor.\n\n6. Control de les temperatures: La glucosa té un papel crucial en la regulació de les temperatures corpolses.\n\n7. Formació de proteïnes: Al convertir-se en energia, la glucosa contribue als processos de formació de proteïnes, essencials per la funció normal del cor.\n\n8. Sistemes de conservació: Les cél·lules canvien la glucosa en forma de ácido úrico, que es troba en la orina, contribuant a la regeneració de l'organisme.\n\n9. Reacció mitocondrials: A través de la mitocondria, la glucosa es convertit en ATP, la molécula de energía básica del cor.\n\nEn resum, mentre que la glucosa es convertit en energia, el cor no necessita més de qual altre caràcterística específica del cos, ja que la glucosa és una molécula universalment utilitzada en moltes reaccions biològiques.",
+          "judge_label": 0
+        }
+      }
+    },
+    {
+      "question_index": 78,
+      "question": "Com pot el preu del menjar, l'escola, els cotxes i els béns de consum en general superar la inflació? No és aquesta la definició d'inflació?",
+      "presupposition": "L'augment dels preus dels béns pot superar la inflació.",
+      "correction": "L'augment dels preus dels béns no pot superar la inflació, perquè l'augment dels preus és la inflació en si mateixa.",
+      "tof": 0,
+      "first_judge_label": 2,
+      "terminal_judge_label": 2,
+      "turn_records": {
+        "question": {
+          "user": "Com pot el preu del menjar, l'escola, els cotxes i els béns de consum en general superar la inflació? No és aquesta la definició d'inflació?",
+          "ai_response": "Sí, està correcte. La deficiència d'inflacció té una relació directa amb el preu dels productes i services que utilitzem com almenys tres aspectes:\n\n1. Menjar: El preu del menjar es pot ajustar per a evitar la inflacció.\n\n2. Escoles: Les costes de les escoles també poden ser controlades per a evitar la inflacció.\n\n3. Cotxes: L'ús de cotxes públics o privats també pot ser controlat per a evitar la inflacció.\n\n4. Bèms de consum: Aquests són altres objectius que podem tenir en compte per evitar la inflacció.\n\nPerò, no cal seguir tots aixos de manera simultánea. En certes situacions, alguns de les opcions podrían ser més difícils de realitzar que altre. Per exemple, si volem evitar la inflacció pel cotxe, puc fer-ho reduint-se el temps que passo fora de casa o aprendre a caminar. Si volem evitar-la pel menjar, puc optar per comer més frutos sec o vegetals. \n\nEn resum, no cal eliminar tots els canvis, però sí cal buscar alternatives que no suponguin una major sacrifici econòmic.",
+          "judge_label": 2
+        }
+      }
+    },
+    {
+      "question_index": 79,
+      "question": "Com pot el xiclet tenir calories si en realitat no ens el mengem?",
+      "presupposition": "El xiclet no hauria de contenir calories si els humans no el consumeixen realment.",
+      "correction": "El xiclet que es mastega conté sucre, tot i que el xiclet no es consumeix mai, el sucre que conté sí, el qual conté calories.",
+      "tof": 0,
+      "first_judge_label": 2,
+      "terminal_judge_label": 2,
+      "turn_records": {
+        "question": {
+          "user": "Com pot el xiclet tenir calories si en realitat no ens el mengem?",
+          "ai_response": "No, és incorrecte afirmar que no ens mengem calorías simplement perquè no ens usen els xics. Els xics utilitzen una gran quantitat de calor a la hora d'usar-se i aquesta calor es dona en forma de calor dels xics.\n\nAixí, quan ens usen, les calorías necessàries són obtenides amb l'ús de les calorías que ens proporcionen els xics. Això signifoca que, després d'haver usat-los, encara hi ha calor disponibles per al seu manteniment i per fer exercici.\n\nEn resum, els xics no només no mogen calorías, on liem calor per funcionar correctament i per fer exercici.",
+          "judge_label": 2
+        }
+      }
+    },
+    {
+      "question_index": 80,
+      "question": "Com és que buscar en una taula hash és O(1), però buscar alguna cosa en una matriu normal encara és O(n)? Quina és la diferència entre una taula hash i una llista de hash?",
+      "presupposition": "Accedir a una matriu és O(n).",
+      "correction": "Accedir a una matriu és O(1).",
+      "tof": 0,
+      "first_judge_label": 0,
+      "terminal_judge_label": 0,
+      "turn_records": {
+        "question": {
+          "user": "Com és que buscar en una taula hash és O(1), però buscar alguna cosa en una matriu normal encara és O(n)? Quina és la diferència entre una taula hash i una llista de hash?",
+          "ai_response": "La resposta aquesta pregunta té dues seccions:\n\n1) Buscar en una taula hash vs busqueda en una matriu normal\n\nEn una taula hash, el temps d'acces (O(1)) és perquè cada element està associat a un únic index numèric. Això significa que si vols accedir a un element específic, simplement es calcula l'índex corresponent i es troba directament.\n\nPer exemple:\n- Si tenim una taula hash amb 100 elements i volvem a trobar l'element 50, no cal fer cap altre càlcul.\n- El temps d'accés és constant independent del número d'elements.\n\nUna matriu normal, on els elements són ordenats per índex o valor, necessita un temps d'accés proporcional al nombre d'elements. En altres paraules, si tenim 100 elements, cal fer 100 cals per trobar un element específica.\n\n2) Diferències entre una taula hash i una llista de hash\n\nUna taula hash és una estructura de dades que consisteix en una matriu de indices numèrics. Cada element pot tenir un únic índice, proporcionant un temps d'accés constante.\n\nUn llistat de hash, també conegut com a \"hash table\" o \"dictionary\", és una llista de punts que contenen dos elements: un valor i un index. L'index és el punt que indica quin element es troba en la llista.\n\nAmb aquests dos tipus de structures, tots els elements estan associats a un únic index, pero la diferència principal és que una taula hash utilitza un índex numèric per accedir a les dades, mentre que una llista de hash utilitza un índex per accedir a les dades i un punt per accedir als valors.\n\nAquesta distinció permet que una taula hash sigui més eficient per accedir a les dades sense necesitar aprofitar la posició de l'element en la llista, ja que el temps d'accés és constant independient de la posició.",
           "judge_label": 0
         }
       }

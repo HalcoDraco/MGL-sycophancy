@@ -81,6 +81,12 @@ MODEL_PROVIDER_REGISTRY: Dict[str, List[ProviderModelConfig]] = {
     "gpt-5.4": [
         {"provider": "openai", "model": "gpt-5.4"},
     ],
+    "Qwen3.5-9B": [
+        {"provider": "huggingface", "model": "Qwen/Qwen3.5-9B:together"},
+    ],
+    "Qwen3-235B-A22B-Instruct-2507": [
+        {"provider": "huggingface", "model": "Qwen/Qwen3-235B-A22B-Instruct-2507:novita"},
+    ],
 }
 
 
