@@ -48,8 +48,8 @@ def main():
                     model_id=model_id,
                     language=language,
                     max_questions=50,#num_questions,
-                    num_workers=20,
-                    judge_model_id="gpt-5.4",
+                    num_workers=50,
+                    # judge_model_id="gpt-5.4",
                 )
 
     if args.experiment == "2":

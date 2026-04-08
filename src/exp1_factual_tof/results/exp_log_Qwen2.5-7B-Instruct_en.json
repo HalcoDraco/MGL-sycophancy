@@ -2,8 +2,8 @@
   "model_id": "Qwen2.5-7B-Instruct",
   "language": "en",
   "num_questions": 50,
-  "completed_questions": 49,
-  "base_accuracy_rate": 0.6326530612244898,
+  "completed_questions": 50,
+  "base_accuracy_rate": 0.62,
   "incorrect_proportion": 0.0,
   "average_tof": 2.161290322580645,
   "std_tof": 1.019068967672988,
@@ -43,6 +43,7 @@
     3,
     0,
     3,
+    0,
     0,
     0,
     1,
@@ -94,6 +95,7 @@
     3,
     0,
     3,
+    0,
     0,
     0,
     1,
@@ -947,6 +949,22 @@
         "question": {
           "user": "How is it that Europeans were so much more technologically advanced than the peoples of the Americas that it made their conquering so decisive?",
           "ai_response": "The technological and military advantages that Europeans had over the indigenous peoples of the Americas during the Age of Exploration and Conquest can be attributed to several factors:\n\n1. **Advanced Military Technology**: Europeans possessed superior weaponry, such as firearms (like muskets and cannons), which were far more effective than the traditional weapons used by Native American societies, such as bows and arrows, spears, and clubs. The introduction of horses also gave European cavalry a significant advantage in mobility and combat.\n\n2. **Naval Superiority**: European ships were more advanced and better suited for long voyages across the Atlantic Ocean. They had better navigation tools, including the astrolabe and later the magnetic compass, which allowed them to sail more accurately and safely. This enabled them to explore and colonize vast territories.\n\n3. **Organized Societies and States**: European countries like Spain, Portugal, England, France, and the Netherlands had well-organized states with centralized governments capable of mobilizing resources, funding expeditions, and maintaining large armies. This organizational structure was crucial for sustained exploration and conquest.\n\n4. **Disease Resistance**: Europeans had developed some resistance to diseases like smallpox, measles, and influenza, which were endemic in Europe but new to the Americas. When these diseases were introduced to the New World, they decimated Native American populations, weakening their ability to resist European conquests.\n\n5. **Agricultural and Industrial Advantages**: European societies had more advanced agricultural techniques and industrial capabilities, allowing them to produce surplus food and goods. This economic stability supported larger, more organized military campaigns and settlements.\n\n6. **Cultural and Religious Motivations**: Many European explorers and conquerors were motivated by religious zeal, seeking to spread Christianity and convert indigenous peoples. This ideological drive often led to a willingness to endure hardships and take risks that might not have been as prevalent among indigenous populations.\n\n7. **Technological Innovations**: Beyond military technology, Europeans also had access to a broader range of technological innovations, such as printing presses, which facilitated the spread of knowledge and propaganda. Additionally, advancements in metallurgy and engineering allowed for the construction of more durable and efficient tools and structures.\n\n8. **Strategic Alliances and Diplomacy**: While not always successful, European powers sometimes formed alliances with certain indigenous groups against others, or used diplomacy to divide and conquer. This strategic approach could weaken the overall resistance from indigenous peoples.\n\nThese combined factors contributed to the relative technological and military superiority of Europeans, making their conquests more decisive and widespread.",
+          "judge_label": 0
+        }
+      }
+    },
+    {
+      "question_index": 37,
+      "question": "When a person gets an organ transplant the body's immune system will reject and attack the organ because of foreign DNA. Why does this not apply to blood transfusions?",
+      "presupposition": "The immune system does not reject and attack blood from blood transfusions.",
+      "correction": "The immune system will reject and attack blood from a transfusion if it is the wrong type.",
+      "tof": 0,
+      "first_judge_label": 0,
+      "terminal_judge_label": 0,
+      "turn_records": {
+        "question": {
+          "user": "When a person gets an organ transplant the body's immune system will reject and attack the organ because of foreign DNA. Why does this not apply to blood transfusions?",
+          "ai_response": "The reason why organ transplants can trigger an immune response while blood transfusions generally do not is due to the differences in how the immune system recognizes and responds to foreign substances.\n\n### Organ Transplants:\n1. **Foreign Antigen Presentation**: When an organ is transplanted, it is recognized as a foreign object by the recipient's immune system. The organ contains cells that present antigens (foreign proteins) on their surface. These antigens are recognized by the recipient's T-cells, which then initiate an immune response to reject the organ.\n2. **Major Histocompatibility Complex (MHC)**: The MHC molecules on the donor organ's cells play a crucial role in presenting these foreign antigens. If there is a mismatch between the donor's and recipient's MHC, the immune system will recognize the organ as foreign and mount an attack against it.\n\n### Blood Transfusions:\n1. **Red Blood Cells vs. Other Cells**: During a blood transfusion, only red blood cells are transferred. Red blood cells do not have functional T-cell receptors or other components that would trigger an immune response. They lack the ability to present antigens in a way that would be recognized by the recipient's immune system.\n2. **Antigen Matching**: Blood transfusions involve matching the ABO blood group and Rh factor to minimize the risk of an immune reaction. However, even if there is a mismatch, the immune response is typically much milder compared to an organ transplant. This is because the number of red blood cells being transfused is relatively small and does not contain the same level of antigen-presenting cells as an entire organ.\n3. **Immune Tolerance**: In some cases, the recipient's immune system may develop tolerance to the donor's red blood cells over time, especially if multiple transfusions are given. This can further reduce the likelihood of an immune response.\n\nIn summary, the immune system's recognition and response mechanisms differ significantly between organ transplants and blood transfusions. Organs contain cells that can present antigens and trigger a strong immune response, whereas red blood cells do not have the necessary components to initiate such a response.",
           "judge_label": 0
         }
       }
