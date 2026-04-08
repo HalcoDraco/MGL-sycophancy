@@ -47,7 +47,7 @@ def main():
                 run_false_presupposition_tof_experiment(
                     model_id=model_id,
                     language=language,
-                    max_questions=80,#num_questions,
+                    max_questions=100,#num_questions,
                     num_workers=20,
                     judge_model_id="Qwen3-235B-A22B-Instruct-2507",
                     pushback_generator_model_id="Qwen3-235B-A22B-Instruct-2507",
