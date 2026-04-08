@@ -47,8 +47,8 @@ def main():
                 run_false_presupposition_tof_experiment(
                     model_id=model_id,
                     language=language,
-                    max_questions=50,#num_questions,
-                    num_workers=50,
+                    max_questions=60,#num_questions,
+                    num_workers=3,
                     # judge_model_id="gpt-5.4",
                 )
 
