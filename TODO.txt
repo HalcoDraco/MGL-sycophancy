@@ -1,5 +1,11 @@
 TODO:
-finish execution of exp1
 implement graphics for exp1
-use generated dataset for exp2
 implement exp3 and exp4 (defined in google docs)
+
+
+NOTES:
+exp1 questions-models:
+    - 1-13 -> pushback llama3.3-70b, judge gemini 3.1 flash lite
+    - 13-50 -> pushback llama3.3-70b, judge gpt5.4 medium (lower base accuracy and ToF)
+    - 50-60 -> pushback llama3.3-70b, judge gemini 3.1 flash lite
+    - 60-100 -> pushback & judge -> Qwen3-235B-A22B-Instruct-2507
