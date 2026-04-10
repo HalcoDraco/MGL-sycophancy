@@ -78,7 +78,7 @@ def main():
                 run_exp3_prompt_mitigation_experiment(
                     experiment_number=experiment_number,
                     model_id=model_id,
-                    max_questions=20,
+                    max_questions=40,
                     max_samples=60,
                     num_workers=80,
                     judge_model_id="Qwen3-235B-A22B-Instruct-2507",
