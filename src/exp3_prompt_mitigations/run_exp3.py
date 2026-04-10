@@ -35,7 +35,11 @@ def _upsert_csv_row(
 		with csv_path.open("r", encoding="utf-8", newline="") as f:
 			reader = csv.DictReader(f)
 			for existing in reader:
-				rows.append({col: str(existing.get(col, "")) for col in fieldnames})
+				normalized = {col: str(existing.get(col, "")) for col in fieldnames}
+				# Drop malformed/blank rows created by interrupted or concurrent writes.
+				if not any(normalized.get(k, "").strip() for k in key_columns):
+					continue
+				rows.append(normalized)
 
 	new_row = {col: str(row.get(col, "")) for col in fieldnames}
 	updated = False
@@ -48,10 +52,20 @@ def _upsert_csv_row(
 	if not updated:
 		rows.append(new_row)
 
+	rows.sort(key=lambda r: tuple(r.get(k, "") for k in key_columns))
+
 	with csv_path.open("w", encoding="utf-8", newline="") as f:
 		writer = csv.DictWriter(f, fieldnames=fieldnames)
 		writer.writeheader()
 		writer.writerows(rows)
+
+
+def _load_json(path: Path) -> Dict[str, Any]:
+	with path.open("r", encoding="utf-8") as f:
+		loaded = json.load(f)
+	if not isinstance(loaded, dict):
+		raise ValueError(f"Expected JSON object in {path}")
+	return loaded
 
 
 def run_exp3_prompt_mitigation_experiment(
@@ -90,7 +104,7 @@ def run_exp3_prompt_mitigation_experiment(
 
 	prompt_workers = max(1, num_workers // prompt_count)
 
-	def _run_single_prompt(prompt_key: str, prompt_text: str) -> tuple[str, Dict[str, Any]]:
+	def _run_single_prompt(prompt_key: str, prompt_text: str) -> str:
 		prompt_fragment = _safe_fragment(prompt_key)
 		prompt_raw_dir = output_root / "raw" / f"exp{experiment_number}" / prompt_fragment
 		prompt_raw_dir.mkdir(parents=True, exist_ok=True)
@@ -113,11 +127,53 @@ def run_exp3_prompt_mitigation_experiment(
 			target_log = exp1_output_dir / f"exp_log_{prompt_fragment}_{model_fragment}.json"
 
 			if source_log.exists():
-				shutil.copy2(source_log, target_log)
+				pass
 			else:
-				with target_log.open("w", encoding="utf-8") as f:
+				with source_log.open("w", encoding="utf-8") as f:
+					json.dump(summary, f, ensure_ascii=False, indent=2)
+		else:
+			summary = run_moral_mirror_experiment(
+				model_id=model_id,
+				max_samples=max_samples,
+				data_path=resolved_exp2_data_path,
+				output_dir=str(prompt_raw_dir),
+				system_prompt=prompt_text,
+				num_workers=prompt_workers,
+			)
+
+			source_log = prompt_raw_dir / f"exp_log_{model_fragment}.json"
+			target_log = exp2_output_dir / f"exp_log_{prompt_fragment}_{model_fragment}.json"
+
+			if source_log.exists():
+				pass
+			else:
+				with source_log.open("w", encoding="utf-8") as f:
 					json.dump(summary, f, ensure_ascii=False, indent=2)
 
+		return prompt_key
+
+	with ThreadPoolExecutor(max_workers=prompt_count) as executor:
+		futures = {
+			executor.submit(_run_single_prompt, prompt_key, prompt_text): prompt_key
+			for prompt_key, prompt_text in prompt_items
+		}
+
+		for future in as_completed(futures):
+			future.result()
+
+	# Sequential merge from raw outputs into final exp3 result folders.
+	for prompt_key, _ in prompt_items:
+		prompt_fragment = _safe_fragment(prompt_key)
+		prompt_raw_dir = output_root / "raw" / f"exp{experiment_number}" / prompt_fragment
+
+		if experiment_number == 1:
+			source_log = prompt_raw_dir / f"exp_log_{model_fragment}_en.json"
+			target_log = exp1_output_dir / f"exp_log_{prompt_fragment}_{model_fragment}.json"
+			if not source_log.exists():
+				continue
+			shutil.copy2(source_log, target_log)
+			summary = _load_json(source_log)
+			results_by_prompt[prompt_key] = summary
 			_upsert_csv_row(
 				csv_path=exp1_output_dir / "exp1.csv",
 				fieldnames=[
@@ -141,24 +197,13 @@ def run_exp3_prompt_mitigation_experiment(
 				key_columns=["system_prompt_key", "model_id"],
 			)
 		else:
-			summary = run_moral_mirror_experiment(
-				model_id=model_id,
-				max_samples=max_samples,
-				data_path=resolved_exp2_data_path,
-				output_dir=str(prompt_raw_dir),
-				system_prompt=prompt_text,
-				num_workers=prompt_workers,
-			)
-
 			source_log = prompt_raw_dir / f"exp_log_{model_fragment}.json"
 			target_log = exp2_output_dir / f"exp_log_{prompt_fragment}_{model_fragment}.json"
-
-			if source_log.exists():
-				shutil.copy2(source_log, target_log)
-			else:
-				with target_log.open("w", encoding="utf-8") as f:
-					json.dump(summary, f, ensure_ascii=False, indent=2)
-
+			if not source_log.exists():
+				continue
+			shutil.copy2(source_log, target_log)
+			summary = _load_json(source_log)
+			results_by_prompt[prompt_key] = summary
 			_upsert_csv_row(
 				csv_path=exp2_output_dir / "exp2.csv",
 				fieldnames=[
@@ -179,17 +224,5 @@ def run_exp3_prompt_mitigation_experiment(
 				},
 				key_columns=["system_prompt_key", "model_id"],
 			)
-
-		return prompt_key, summary
-
-	with ThreadPoolExecutor(max_workers=prompt_count) as executor:
-		futures = {
-			executor.submit(_run_single_prompt, prompt_key, prompt_text): prompt_key
-			for prompt_key, prompt_text in prompt_items
-		}
-
-		for future in as_completed(futures):
-			prompt_key, summary = future.result()
-			results_by_prompt[prompt_key] = summary
 
 	return results_by_prompt

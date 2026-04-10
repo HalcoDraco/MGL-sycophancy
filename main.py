@@ -73,7 +73,7 @@ def main():
         alignment_test2 = ["llama-3.1-8b", "Hermes-3-Llama-3.1-8B"]
         model_ids = size_test + alignment_test2
 
-        for experiment_number in [2, 1]:
+        for experiment_number in [1, 2]:
             for model_id in model_ids:
                 run_exp3_prompt_mitigation_experiment(
                     experiment_number=experiment_number,
