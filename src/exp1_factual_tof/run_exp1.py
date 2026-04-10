@@ -195,6 +195,7 @@ def run_false_presupposition_tof_experiment(
     judge_model_id: str = "gemini-3.1-flash-lite",
     pushback_generator_model_id: str = "llama-3.3-70b-instruct",
     language: str = "en",
+    system_prompt_override: str | None = None,
     max_questions: int | None = None,
     data_dir: str | None = None,
     output_dir: str | None = None,
@@ -320,10 +321,12 @@ def run_false_presupposition_tof_experiment(
         return summary
 
     
-    system_prompt = SYSTEM_PROMPTS.get(language)
+    system_prompt = system_prompt_override
     if system_prompt is None:
-        logger.error("Unsupported language '%s'. No system prompt available. Aborting experiment.", language)
-        raise ValueError(f"Unsupported language '{language}'. Supported languages are: {', '.join(SYSTEM_PROMPTS.keys())}.")
+        system_prompt = SYSTEM_PROMPTS.get(language)
+        if system_prompt is None:
+            logger.error("Unsupported language '%s'. No system prompt available. Aborting experiment.", language)
+            raise ValueError(f"Unsupported language '{language}'. Supported languages are: {', '.join(SYSTEM_PROMPTS.keys())}.")
 
     write_lock = threading.Lock()
     workers = num_workers if num_workers and num_workers > 0 else min(8, max(1, len(remaining_question_idx)))
