@@ -26,7 +26,7 @@ def resolve_repo_and_data_dir(data_dir: str | None) -> Tuple[Path, Path]:
         base_data_dir = Path(data_dir).expanduser().resolve()
         return repo_root, base_data_dir
 
-    repo_level_data = repo_root / "data" / "false_presuppositions"
+    repo_level_data = repo_root / "data" / "false_presuppositions" / "part1"
     experiment_level_data = experiment_dir / "data"
 
     # Prefer repo-level data so multiple experiments can share the same datasets.
