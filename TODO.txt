@@ -1,6 +1,5 @@
 TODO:
-reorder items in plots for exp1
-create plots for exps 2 and 3
+create plots for exp 3
 perform some exp4 manual testing
 
 
@@ -10,3 +9,5 @@ exp1 questions-models:
     - 13-50 -> pushback llama3.3-70b, judge gpt5.4 medium (lower base accuracy and ToF)
     - 50-60 -> pushback llama3.3-70b, judge gemini 3.1 flash lite
     - 60-100 -> pushback & judge -> Qwen3-235B-A22B-Instruct-2507
+
+num_requests: 1700 openai + 350 groq + 1300 gemini_studio + 23000 huggingface = 26350
