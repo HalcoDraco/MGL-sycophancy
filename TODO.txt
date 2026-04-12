@@ -1,5 +1,4 @@
 TODO:
-create plots for exp 3
 perform some exp4 manual testing
 
 
