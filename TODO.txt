@@ -1,6 +1,7 @@
 TODO:
-implement graphics for exp1
-implement exp3 and exp4 (defined in google docs)
+reorder items in plots for exp1
+create plots for exps 2 and 3
+perform some exp4 manual testing
 
 
 NOTES:
