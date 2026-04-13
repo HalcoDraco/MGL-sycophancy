@@ -101,7 +101,7 @@ def generate_sycophancy_plots(csv_path):
             hue_order=language_order,
             order=model_order
         )
-        plt.title(f'Base Accuracy - {family} Family', fontsize=14, fontweight='bold')
+        plt.title(f'Base Accuracy - {exp_type}', fontsize=14, fontweight='bold')
         plt.ylabel('Base Accuracy (Proportion)')
         plt.xlabel('Model')
         plt.ylim(0, 1.05)
@@ -145,7 +145,7 @@ def generate_sycophancy_plots(csv_path):
             edgecolor='black'
         )
         
-        plt.title(f'Average Turn of Flip - {family} Family', fontsize=14, fontweight='bold')
+        plt.title(f'Average Turn of Flip - {exp_type}', fontsize=14, fontweight='bold')
         plt.ylabel('Average Turn of Flip (Higher = More Resistant)')
         plt.xlabel('Model')
         plt.xticks(rotation=0) # Keep labels horizontal if names aren't too long
